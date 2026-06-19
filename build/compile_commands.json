@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/src/main.cpp.o -c /home/ivan/Projects/SoftServeStencil/src/main.cpp",
+  "file": "/home/ivan/Projects/SoftServeStencil/src/main.cpp",
+  "output": "CMakeFiles/softserve_task.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/src/cpu_reference.cpp.o -c /home/ivan/Projects/SoftServeStencil/src/cpu_reference.cpp",
+  "file": "/home/ivan/Projects/SoftServeStencil/src/cpu_reference.cpp",
+  "output": "CMakeFiles/softserve_task.dir/src/cpu_reference.cpp.o"
+},
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/softserve_task.dir/includes_CUDA.rsp  -lineinfo --use_fast_math -Xptxas=-v -g -std=c++17 \"--generate-code=arch=compute_80,code=[compute_80,sm_80]\" \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" \"--generate-code=arch=compute_90,code=[compute_90,sm_90]\" -x cu -c /home/ivan/Projects/SoftServeStencil/src/cuda_kernels.cu -o CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o",
+  "file": "/home/ivan/Projects/SoftServeStencil/src/cuda_kernels.cu",
+  "output": "CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o"
+},
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/tests/correctness.cpp.o -c /home/ivan/Projects/SoftServeStencil/tests/correctness.cpp",
+  "file": "/home/ivan/Projects/SoftServeStencil/tests/correctness.cpp",
+  "output": "CMakeFiles/softserve_task.dir/tests/correctness.cpp.o"
+},
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o -c /home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp",
+  "file": "/home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp",
+  "output": "CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o"
+}
+]

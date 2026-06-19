@@ -5,7 +5,7 @@
 #include <vector>
 #include <cmath>
 
-void execute_test(int size) {
+void correctness(int size) {
     int N = size * size;
     std::vector<float> h_input(N);
     std::vector<float> h_cpu_output(N, 0.0f);
@@ -57,11 +57,11 @@ void execute_test(int size) {
     CUDA_CHECK(cudaFree(d_output));
 }
 
-int main() {
-    execute_test(256);
-    execute_test(1024);
-    execute_test(4096);
+bool all_correctness() {
+    correctness(256);
+    correctness(1024);
+    correctness(4096);
     std::cout << "\nAll Correctness Validations Passed Successfully.\n";
-    return 0;
+    return true;
 }
 

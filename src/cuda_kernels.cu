@@ -1,7 +1,10 @@
 #include "cuda_kernels.cuh"
-#include "utils.hpp"
-#include <cuda_pipeline.h>
+#include "../include/utils.hpp"
+#include <cuda/pipeline>
+#include <cuda_runtime.h>
+#include <cuda/pipeline>
 #include <cooperative_groups.h>
+
 
 namespace cg = cooperative_groups;
 
@@ -64,11 +67,22 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 __global__ void __launch_bounds__(128, 4)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height) {
 
+    // 1. Allocate without an explicit initialization expression to avoid the warning
+    __shared__ cuda::barrier<cuda::thread_scope_block> bar;
+
     // Allocate shared memory for async loading
     __shared__ float smem_input[SHARED_H][SHARED_W];
     __shared__ float smem_min_pool[4]; // One min value per warp (4 warps total)
 
     int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
+    
+    // 2. Initialize the barrier on thread 0 BEFORE anyone uses it
+    if (tid == 0) {
+        init(&bar, blockDim.x * blockDim.y); // Pass total block threads (128)
+    }
+    // We must sync the block here so all threads know the barrier is ready
+    __syncthreads();     
+    
     int block_origin_x = blockIdx.x * BLK_W;
     int block_origin_y = blockIdx.y * BLK_H;
 
@@ -87,10 +101,15 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         glob_y = max(0, min(height - 1, glob_y));
 
         // Direct pipeline asynchronous memory transfer
-        cuda::memcpy_async(&smem_input[smem_y][smem_x], &input[glob_y * width + glob_x], sizeof(float));
+        cuda::memcpy_async(
+            &smem_input[smem_y][smem_x], 
+            &input[glob_y * width + glob_x], 
+            sizeof(float),
+            bar);
     }
-    cuda::memcpy_async_wait();
-    __syncthreads();
+    
+    bar.arrive_and_wait();
+    // __syncthreads(); // not needed when there is a barrier
 
     // 2. Intra-Warp Shuffle Reductions for Tile Minimum
     // Step A: Each thread finds its local min across sequential rows assigned to it

@@ -1,10 +1,10 @@
 #include "cuda_kernels.cuh"
-#include "utils.hpp"
+#include "../include/utils.hpp"
 #include <iostream>
 #include <vector>
 #include <iomanip>
 
-void run_benchmark(int size) {
+void benchmark(int size) {
     int N = size * size;
     std::vector<float> h_input(N, 1.25f);
 
@@ -50,8 +50,9 @@ void run_benchmark(int size) {
     CUDA_CHECK(cudaFree(d_output));
 }
 
-int main() {
-    std::cout << std::left
+
+bool all_benchmarks() {
+        std::cout << std::left
               << std::setw(12) << "Resolution"
               << std::setw(18) << "Baseline Time"
               << std::setw(18) << "Optimized Time"
@@ -60,10 +61,9 @@ int main() {
               << std::setw(18) << "Est. GFLOPS" << std::endl;
     std::cout << std::string(95, '-') << std::endl;
 
-    run_benchmark(1024);
-    run_benchmark(4096);
-    run_benchmark(8192);
+    benchmark(1024);
+    benchmark(4096);
+    benchmark(8192);
 
-    return 0;
+    return true;
 }
-
