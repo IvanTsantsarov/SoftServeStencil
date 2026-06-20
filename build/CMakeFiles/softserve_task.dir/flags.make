@@ -11,7 +11,7 @@ CUDA_FLAGS =  -lineinfo --use_fast_math -Xptxas=-v -g -std=c++17 "--generate-cod
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ivan/Projects/SoftServeStencil/include -isystem /usr/local/cuda/targets/x86_64-linux/include
+CXX_INCLUDES = -I/home/ivan/Projects/SoftServeStencil/include -I/home/ivan/Projects/SoftServeStencil/tests -isystem /usr/local/cuda/targets/x86_64-linux/include
 
 CXX_FLAGS = -g -std=gnu++17
 

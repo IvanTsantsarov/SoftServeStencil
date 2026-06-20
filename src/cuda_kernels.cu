@@ -1,15 +1,19 @@
+// Supress warning about the barrier
+#pragma nv_diag_suppress 20054
+
+
 #include "cuda_kernels.cuh"
-#include "../include/utils.hpp"
+#include "defines.h"
+#include "utils.hpp"
 #include <cuda/pipeline>
 #include <cuda_runtime.h>
 #include <cuda/pipeline>
 #include <cooperative_groups.h>
 
-
 namespace cg = cooperative_groups;
 
 // Constant Memory allocation for Coefficients
-__constant__ float c_coeffs[16][16];
+__constant__ float c_coeffs[COEF_S][COEF_S];
 
 // Helper to safely fetch clamp-to-edge global values
 __device__ inline float fetch_pixel(const float* input, int x, int y, int width, int height) {
@@ -18,33 +22,35 @@ __device__ inline float fetch_pixel(const float* input, int x, int y, int width,
     return input[y * width + x];
 }
 
-// ==========================================
+////////////////////////////////////////////////////////////////////////////////
 // BASELINE KERNEL IMPLEMENTATION
-// ==========================================
+////////////////////////////////////////////////////////////////////////////////
 __global__ void baseline_kernel(const float* input, float* output, int width, int height) {
-    int tx = blockIdx.x * 128;
-    int ty = blockIdx.y * 32;
+    int tx = blockIdx.x * TILE_W;
+    int ty = blockIdx.y * TILE_H;
 
     if (tx >= width || ty >= height) return;
 
     // Phase 1: Compute tile minimum via unoptimized loop scan
-    float tile_min = 1e37f;
-    for (int y = ty; y < ty + 32 && y < height; ++y) {
-        for (int x = tx; x < tx + 128 && x < width; ++x) {
+    float tile_min = MAX_FLT;
+    int y_end = ty + TILE_H;
+    int x_end = tx + TILE_H;
+    for (int y = ty; y < y_end && y < height; ++y) {
+        for (int x = tx; x < x_end + TILE_W && x < width; ++x) {
             float v = input[y * width + x];
             if (v < tile_min) tile_min = v;
         }
     }
-    float norm_factor = max(tile_min, 1e-6f);
+    float norm_factor = max(tile_min, MIN_FLT);
 
     // Phase 2: Compute Stencil
-    int x = blockIdx.x * 128 + threadIdx.x;
-    int y = blockIdx.y * 32 + threadIdx.y;
+    int x = blockIdx.x * TILE_W + threadIdx.x;
+    int y = blockIdx.y * TILE_H + threadIdx.y;
 
     if (x < width && y < height) {
         float acc = 0.0f;
-        for (int dy = -7; dy <= 8; ++dy) {
-            for (int dx = -7; dx <= 8; ++dx) {
+        for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
+            for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
                 float v = fetch_pixel(input, x + dx, y + dy, width, height);
                 float transformed = v * v + 0.25f * v + sqrtf(fabsf(v));
                 acc += c_coeffs[dy + 7][dx + 7] * transformed;
@@ -54,40 +60,33 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
     }
 }
 
-// ==========================================
+////////////////////////////////////////////////////////////////////////////////
 // OPTIMIZED KERNEL IMPLEMENTATION (AMPERE+)
-// ==========================================
-#define BLK_W 128
-#define BLK_H 32
-#define HALO_L 7
-#define HALO_R 8
-#define SHARED_W (BLK_W + HALO_L + HALO_R) // 128 + 7 + 8 = 143
-#define SHARED_H (BLK_H + HALO_L + HALO_R) // 32 + 7 + 8 = 47
-
+////////////////////////////////////////////////////////////////////////////////
 __global__ void __launch_bounds__(128, 4)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height) {
 
-    // 1. Allocate without an explicit initialization expression to avoid the warning
+    // Allocate without an explicit initialization expression (ugly)
+    // to avoid the warning or just suppress it like I did
     __shared__ cuda::barrier<cuda::thread_scope_block> bar;
 
     // Allocate shared memory for async loading
     __shared__ float smem_input[SHARED_H][SHARED_W];
-    __shared__ float smem_min_pool[4]; // One min value per warp (4 warps total)
+    __shared__ float smem_min_pool[WARPS_C]; // One min value per warp
 
     int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
     
-    // 2. Initialize the barrier on thread 0 BEFORE anyone uses it
+    // Initialize the barrier on thread 0 BEFORE anyone uses it
     if (tid == 0) {
-        init(&bar, blockDim.x * blockDim.y); // Pass total block threads (128)
+        init(&bar, blockDim.x * blockDim.y); // Pass total block threads
     }
     // We must sync the block here so all threads know the barrier is ready
     __syncthreads();     
     
-    int block_origin_x = blockIdx.x * BLK_W;
-    int block_origin_y = blockIdx.y * BLK_H;
+    int block_origin_x = blockIdx.x * TILE_W;
+    int block_origin_y = blockIdx.y * TILE_H;
 
-    // 1. Asynchronous Global to Shared Memory Copy (Ampere Feature)
-    // Total elements to load: 143 * 47 = 6721. Shared out across 128 threads.
+    // Asynchronous Global to Shared Memory Copy (Ampere+)
     int total_elements = SHARED_W * SHARED_H;
     for (int i = tid; i < total_elements; i += 128) {
         int smem_y = i / SHARED_W;
@@ -111,13 +110,15 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     bar.arrive_and_wait();
     // __syncthreads(); // not needed when there is a barrier
 
-    // 2. Intra-Warp Shuffle Reductions for Tile Minimum
-    // Step A: Each thread finds its local min across sequential rows assigned to it
-    float thread_min = 1e37f;
+    //////////////////////////////////////////////////////////
+    // Warp Shuffle Reductions to calculate tile minimum value
+
+    // Step 1: Each thread finds its local min
+    float thread_min = MAX_FLT;
     int local_x = threadIdx.x; // Threads mapped 0 to 31 directly matches tile columns
     int local_y_start = threadIdx.y * 8; // Thread block is 32x4. Each warp works on 8 rows.
 
-    for (int row = 0; row < 8; ++row) {
+    for (int row = 0; row < HALO_S; ++row) {
         int ly = local_y_start + row;
         if (block_origin_x + local_x < width && block_origin_y + ly < height) {
             float v = smem_input[ly + HALO_L][local_x + HALO_L];
@@ -125,12 +126,19 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         }
     }
 
-    // Step B: Native Warp shuffle down reduction
-    for (int offset = 16; offset > 0; offset /= 2) {
-        thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
-    }
+    // Step 2: Native Warp shuffle down reduction
+    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 16));
+    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 8));
+    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 4));
+    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 2));
+    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 1));
+    // or
+    // #pragma unroll
+    // for (int offset = 16; offset > 0; offset /= 2) {
+    //    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
+    //}
 
-    // Step C: Master thread of each warp writes to shared cache pool
+    // Step 3: Master thread of each warp writes to shared cache pool
     if (threadIdx.x == 0) {
         smem_min_pool[threadIdx.y] = thread_min;
     }
@@ -149,11 +157,12 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
     __syncthreads();
 
-    float norm_factor = max(smem_min_pool[0], 1e-6f);
+    float norm_factor = max(smem_min_pool[0], MIN_FLT);
 
     // 3. Stencil Computation using Cached Shared Memory Matrix
     // Process 32x128 Tile using a 32x4 thread layout (Looping 8 times over Y dimension)
     int target_x = block_origin_x + threadIdx.x;
+    int smem_center_x = threadIdx.x + HALO_L;
     for (int step = 0; step < 8; ++step) {
         int target_ly = threadIdx.y * 8 + step;
         int target_y = block_origin_y + target_ly;
@@ -161,14 +170,19 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         if (target_x < width && target_y < height) {
             float acc = 0.0f;
             int smem_center_y = target_ly + HALO_L;
-            int smem_center_x = threadIdx.x + HALO_L;
 
-            #pragma unroll 16
+            // #pragma unroll 16 // Too many unrols alongside with dx loop
             for (int dy = -7; dy <= 8; ++dy) {
+                int current_smem_y = smem_center_y + dy;
                 #pragma unroll 16
                 for (int dx = -7; dx <= 8; ++dx) {
-                    float v = smem_input[smem_center_y + dy][smem_center_x + dx];
-                    float transformed = v * v + 0.25f * v + sqrtf(fabsf(v));
+
+                    // *** TODO: Optimize this to use registers instead of shared mem
+                    float v = smem_input[current_smem_y][smem_center_x + dx];
+                    
+                    // SFU will elliminate the need of sqrt lookup table like in CPU
+                    float transformed = v * v + 0.25f * v + sqrtf(fabsf(v)); 
+                    
                     acc += c_coeffs[dy + 7][dx + 7] * transformed;
                 }
             }
@@ -180,8 +194,9 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 // ==========================================
 // DRIVER ROUTINES
 // ==========================================
+// not using std::function or CUfunction just to look good
 void launch_baseline_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
-    CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, 256 * sizeof(float)));
+    CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
     dim3 threadsPerBlock(32, 4); // Fixed layout targeting 128 elements inside loop structures
     dim3 numBlocks((width + 127) / 128, (height + 31) / 32);
@@ -202,7 +217,7 @@ void launch_baseline_kernel(const float* d_input, float* d_output, int width, in
 }
 
 void launch_optimized_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
-    CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, 256 * sizeof(float)));
+    CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
     dim3 threadsPerBlock(32, 4); // 128 total threads matching optimized architecture bounds
     dim3 numBlocks((width + 127) / 128, (height + 31) / 32);

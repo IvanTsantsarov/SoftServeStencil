@@ -1,4 +1,4 @@
-#include "../tests/tests.h"
+#include "tests.h"
 
 int main() {
     all_correctness();

@@ -1,3 +1,4 @@
+#include "../include/defines.h"
 #include "../include/cpu_reference.hpp"
 #include <cmath>
 #include <algorithm>
@@ -7,10 +8,8 @@ void cpu_stencil_transform(
     float* output,
     int width,
     int height,
-    const float coeffs[16][16])
+    const float coeffs[COEF_S][COEF_S])
 {
-    const int TILE_W = 128;
-    const int TILE_H = 32;
     int height_1 = height - 1;
     int width_1 = width - 1;
 

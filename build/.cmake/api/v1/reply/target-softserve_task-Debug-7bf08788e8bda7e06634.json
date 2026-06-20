@@ -32,7 +32,7 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 32,
+				"line" : 33,
 				"parent" : 0
 			},
 			{
@@ -57,6 +57,10 @@
 				{
 					"backtrace" : 3,
 					"path" : "/home/ivan/Projects/SoftServeStencil/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/ivan/Projects/SoftServeStencil/tests"
 				},
 				{
 					"backtrace" : 2,
@@ -93,6 +97,10 @@
 				{
 					"backtrace" : 3,
 					"path" : "/home/ivan/Projects/SoftServeStencil/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/home/ivan/Projects/SoftServeStencil/tests"
 				},
 				{
 					"backtrace" : 2,

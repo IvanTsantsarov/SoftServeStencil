@@ -26,6 +26,7 @@ add_executable(softserve_task
 # 2. Bind includes and system paths directly to the application
 target_include_directories(softserve_task PRIVATE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tests>
 )
 
 # 3. Link required libraries directly
