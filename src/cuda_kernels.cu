@@ -159,6 +159,9 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 
     float norm_factor = max(smem_min_pool[0], MIN_FLT);
 
+    // Allocate a register array for x row
+    float local_row[HALO_ALL]; 
+
     // 3. Stencil Computation using Cached Shared Memory Matrix
     // Process 32x128 Tile using a 32x4 thread layout (Looping 8 times over Y dimension)
     int target_x = block_origin_x + threadIdx.x;
@@ -172,18 +175,28 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
             int smem_center_y = target_ly + HALO_L;
 
             // #pragma unroll 16 // Too many unrols alongside with dx loop
-            for (int dy = -7; dy <= 8; ++dy) {
+            // it can break registers file
+            for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
                 int current_smem_y = smem_center_y + dy;
-                #pragma unroll 16
-                for (int dx = -7; dx <= 8; ++dx) {
 
-                    // *** TODO: Optimize this to use registers instead of shared mem
-                    float v = smem_input[current_smem_y][smem_center_x + dx];
+                // Copy current row to registers for each warp to use it
+                // in the upcomming dx itterations
+                #pragma unroll
+                for (int dx = -7; dx <= 8; ++dx) {
+                    local_row[dx + 7] = smem_input[current_smem_y][smem_center_x + dx];
+                }
+
+                #pragma unroll
+                for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
+                    int dx_offset = dx + 7;
+                    // Read directly out of our zero-latency register array
+                    float v = local_row[dx_offset]; 
                     
                     // SFU will elliminate the need of sqrt lookup table like in CPU
                     float transformed = v * v + 0.25f * v + sqrtf(fabsf(v)); 
                     
-                    acc += c_coeffs[dy + 7][dx + 7] * transformed;
+                    // accumilate the result
+                    acc += c_coeffs[dy + 7][dx_offset] * transformed;
                 }
             }
             output[target_y * width + target_x] = acc / norm_factor;

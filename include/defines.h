@@ -8,6 +8,7 @@
 #define HALO_S 8
 #define HALO_L 7
 #define HALO_R 8
+#define HALO_ALL 16
 #define SHARED_W (TILE_W + HALO_L + HALO_R) // 128 + 7 + 8 = 143
 #define SHARED_H (TILE_H + HALO_L + HALO_R) // 32 + 7 + 8 = 47
 #define MAX_FLT 1e37f
