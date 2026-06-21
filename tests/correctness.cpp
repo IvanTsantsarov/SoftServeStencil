@@ -17,7 +17,15 @@ void correctness(int side) {
 
     // Generate image file
     std::vector<float> input = generate_image(side);
-    normalize(side, input);
+    
+    normalize(side, input); // trash comment
+
+    /*
+    for( int i = 0; i < all; i++ ) {
+        std::cout << input[i] << "|";
+    }
+    */
+
     char file_path[256] = {0};
     sprintf(file_path, "../res/image%d.ppm", side);
     write_ppm(file_path, side, input);

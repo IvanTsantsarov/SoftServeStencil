@@ -55,7 +55,10 @@ std::vector<float> generate_image(int side)
             float val = 0.0f;
             for( int i = 0; i < RND_CENTERS_C; i++) {
                 Center&  c = centers[i];
-                val += sinf((x - c.x)*c.p) * cosf((y - c.y)*c.p) * c.a;
+                int dx = x - c.x;
+                int dy = y - c.y;
+                int d = sqrtf(dx*dx + dy*dy);
+                val += sinf(d*c.p) * cosf(d*c.p) * c.a;
             }
             data[y*side + x] = val;
         }
@@ -110,11 +113,10 @@ bool write_ppm(const char* path, int side, std::vector<float>& data)
             static unsigned char color[3];
             int index = y*side + x; // no need to optimize it
             float val = data[index];
-
-            int intensity = 255 * val;
-            color[0] = val;
-            color[1] = val;
-            color[2] = val;
+            int c = val * 255.0f;
+            color[0] = c;
+            color[1] = c;
+            color[2] = c;
             if( !fwrite(color, 1, 3, fp) ) {
                 return false;
             }
