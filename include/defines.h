@@ -13,3 +13,8 @@
 #define SHARED_H (TILE_H + HALO_L + HALO_R) // 32 + 7 + 8 = 47
 #define MAX_FLT 1e37f
 #define MIN_FLT 1e-6f
+#define MAX_ERR 1e-3
+
+#define RND_CENTERS_C 10
+#define RND_AMP 2.0f
+#define RND_PHASE 0.2f

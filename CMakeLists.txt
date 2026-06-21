@@ -21,6 +21,7 @@ add_executable(softserve_task
     src/cuda_kernels.cu
     tests/correctness.cpp
     tests/benchmarks.cpp
+    tests/generate.cpp
 )
 
 # 2. Bind includes and system paths directly to the application

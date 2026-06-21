@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o.d"
   "CMakeFiles/softserve_task.dir/tests/correctness.cpp.o"
   "CMakeFiles/softserve_task.dir/tests/correctness.cpp.o.d"
+  "CMakeFiles/softserve_task.dir/tests/generate.cpp.o"
+  "CMakeFiles/softserve_task.dir/tests/generate.cpp.o.d"
   "softserve_task"
   "softserve_task.pdb"
 )

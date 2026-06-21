@@ -186,7 +186,8 @@ CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o : /home/ivan/Projects/SoftSe
     /usr/include/c++/13/bits/stl_relops.h \
     /usr/include/c++/13/initializer_list \
     /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
-    /home/ivan/Projects/SoftServeStencil/src/../include/utils.hpp \
+    /home/ivan/Projects/SoftServeStencil/include/defines.h \
+    /home/ivan/Projects/SoftServeStencil/include/utils.hpp \
     /usr/include/c++/13/iostream \
     /usr/include/c++/13/ostream \
     /usr/include/c++/13/ios \

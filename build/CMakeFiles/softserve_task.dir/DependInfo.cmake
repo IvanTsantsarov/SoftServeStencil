@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/ivan/Projects/SoftServeStencil/src/main.cpp" "CMakeFiles/softserve_task.dir/src/main.cpp.o" "gcc" "CMakeFiles/softserve_task.dir/src/main.cpp.o.d"
   "/home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp" "CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o" "gcc" "CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o.d"
   "/home/ivan/Projects/SoftServeStencil/tests/correctness.cpp" "CMakeFiles/softserve_task.dir/tests/correctness.cpp.o" "gcc" "CMakeFiles/softserve_task.dir/tests/correctness.cpp.o.d"
+  "/home/ivan/Projects/SoftServeStencil/tests/generate.cpp" "CMakeFiles/softserve_task.dir/tests/generate.cpp.o" "gcc" "CMakeFiles/softserve_task.dir/tests/generate.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

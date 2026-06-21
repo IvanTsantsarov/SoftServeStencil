@@ -81,12 +81,12 @@ clean: CMakeFiles/softserve_task.dir/clean
 CMakeFiles/softserve_task.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ivan/Projects/SoftServeStencil/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target softserve_task"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/ivan/Projects/SoftServeStencil/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target softserve_task"
 .PHONY : CMakeFiles/softserve_task.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/softserve_task.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Projects/SoftServeStencil/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Projects/SoftServeStencil/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/softserve_task.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Projects/SoftServeStencil/build/CMakeFiles 0
 .PHONY : CMakeFiles/softserve_task.dir/rule

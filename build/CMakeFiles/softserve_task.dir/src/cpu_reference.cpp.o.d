@@ -1,6 +1,7 @@
 CMakeFiles/softserve_task.dir/src/cpu_reference.cpp.o: \
  /home/ivan/Projects/SoftServeStencil/src/cpu_reference.cpp \
  /usr/include/stdc-predef.h \
+ /home/ivan/Projects/SoftServeStencil/src/../include/defines.h \
  /home/ivan/Projects/SoftServeStencil/src/../include/cpu_reference.hpp \
  /usr/include/c++/13/cmath /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \

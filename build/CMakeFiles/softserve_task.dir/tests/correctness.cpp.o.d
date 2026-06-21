@@ -3,6 +3,7 @@ CMakeFiles/softserve_task.dir/tests/correctness.cpp.o: \
  /usr/include/stdc-predef.h \
  /home/ivan/Projects/SoftServeStencil/include/cpu_reference.hpp \
  /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
  /home/ivan/Projects/SoftServeStencil/include/utils.hpp \
  /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
  /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
@@ -204,4 +205,5 @@ CMakeFiles/softserve_task.dir/tests/correctness.cpp.o: \
  /usr/include/c++/13/tr1/modified_bessel_func.tcc \
  /usr/include/c++/13/tr1/poly_hermite.tcc \
  /usr/include/c++/13/tr1/poly_laguerre.tcc \
- /usr/include/c++/13/tr1/riemann_zeta.tcc
+ /usr/include/c++/13/tr1/riemann_zeta.tcc \
+ /home/ivan/Projects/SoftServeStencil/tests/tests.h

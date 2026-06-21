@@ -23,7 +23,7 @@ __device__ inline float fetch_pixel(const float* input, int x, int y, int width,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// BASELINE KERNEL IMPLEMENTATION
+// NON OPTIMIZED (BASELINE) KERNEL IMPLEMENTATION
 ////////////////////////////////////////////////////////////////////////////////
 __global__ void baseline_kernel(const float* input, float* output, int width, int height) {
     int tx = blockIdx.x * TILE_W;
@@ -32,6 +32,7 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
     if (tx >= width || ty >= height) return;
 
     // Phase 1: Compute tile minimum via unoptimized loop scan
+    // shared mem access used 20-30 clock ticks
     float tile_min = MAX_FLT;
     int y_end = ty + TILE_H;
     int x_end = tx + TILE_H;
@@ -86,7 +87,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     int block_origin_x = blockIdx.x * TILE_W;
     int block_origin_y = blockIdx.y * TILE_H;
 
-    // Asynchronous Global to Shared Memory Copy (Ampere+)
+    // Asynchronous global to shared memory (Ampere+)
     int total_elements = SHARED_W * SHARED_H;
     for (int i = tid; i < total_elements; i += 128) {
         int smem_y = i / SHARED_W;
@@ -126,17 +127,11 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         }
     }
 
-    // Step 2: Native Warp shuffle down reduction
-    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 16));
-    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 8));
-    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 4));
-    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 2));
-    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, 1));
-    // or
+    unsigned int active_mask = __activemask();
     // #pragma unroll
-    // for (int offset = 16; offset > 0; offset /= 2) {
-    //    thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
-    //}
+    for (int offset = 16; offset > 0; offset /= 2) {
+        thread_min = min(thread_min, __shfl_down_sync(active_mask, thread_min, offset));
+    }
 
     // Step 3: Master thread of each warp writes to shared cache pool
     if (threadIdx.x == 0) {
@@ -175,11 +170,11 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
             int smem_center_y = target_ly + HALO_L;
 
             // #pragma unroll 16 // Too many unrols alongside with dx loop
-            // it can break registers file
+            // it can put pressure on registers file
             for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
                 int current_smem_y = smem_center_y + dy;
 
-                // Copy current row to registers for each warp to use it
+                // Copy current row into registers for each warp to use it
                 // in the upcomming dx itterations
                 #pragma unroll
                 for (int dx = -7; dx <= 8; ++dx) {
@@ -204,10 +199,10 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
 }
 
-// ==========================================
-// DRIVER ROUTINES
-// ==========================================
-// not using std::function or CUfunction just to look good
+//////////////////////////////////////////////
+// NON OPTIMAZED (BASELINE) KERNEL LAUNCH
+//////////////////////////////////////////////
+// not using std::function or CUfunction just to intuitive
 void launch_baseline_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
     CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
@@ -229,6 +224,9 @@ void launch_baseline_kernel(const float* d_input, float* d_output, int width, in
     CUDA_CHECK(cudaEventDestroy(stop));
 }
 
+//////////////////////////////////////////////
+// OPTIMAZED KERNEL (AMPERE+) LAUNCH
+//////////////////////////////////////////////
 void launch_optimized_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
     CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 

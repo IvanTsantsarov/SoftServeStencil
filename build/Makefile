@@ -249,6 +249,30 @@ tests/correctness.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/tests/correctness.cpp.s
 .PHONY : tests/correctness.cpp.s
 
+tests/generate.o: tests/generate.cpp.o
+.PHONY : tests/generate.o
+
+# target to build an object file
+tests/generate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/tests/generate.cpp.o
+.PHONY : tests/generate.cpp.o
+
+tests/generate.i: tests/generate.cpp.i
+.PHONY : tests/generate.i
+
+# target to preprocess a source file
+tests/generate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/tests/generate.cpp.i
+.PHONY : tests/generate.cpp.i
+
+tests/generate.s: tests/generate.cpp.s
+.PHONY : tests/generate.s
+
+# target to generate assembly for a file
+tests/generate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/softserve_task.dir/build.make CMakeFiles/softserve_task.dir/tests/generate.cpp.s
+.PHONY : tests/generate.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -273,6 +297,9 @@ help:
 	@echo "... tests/correctness.o"
 	@echo "... tests/correctness.i"
 	@echo "... tests/correctness.s"
+	@echo "... tests/generate.o"
+	@echo "... tests/generate.i"
+	@echo "... tests/generate.s"
 .PHONY : help
 
 

@@ -28,5 +28,11 @@
   "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -I/home/ivan/Projects/SoftServeStencil/tests -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o -c /home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp",
   "file": "/home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp",
   "output": "CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o"
+},
+{
+  "directory": "/home/ivan/Projects/SoftServeStencil/build",
+  "command": "/usr/bin/g++  -I/home/ivan/Projects/SoftServeStencil/include -I/home/ivan/Projects/SoftServeStencil/tests -isystem /usr/local/cuda/targets/x86_64-linux/include -g -std=gnu++17 -o CMakeFiles/softserve_task.dir/tests/generate.cpp.o -c /home/ivan/Projects/SoftServeStencil/tests/generate.cpp",
+  "file": "/home/ivan/Projects/SoftServeStencil/tests/generate.cpp",
+  "output": "CMakeFiles/softserve_task.dir/tests/generate.cpp.o"
 }
 ]
