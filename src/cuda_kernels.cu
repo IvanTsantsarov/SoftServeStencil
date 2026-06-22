@@ -99,7 +99,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
     bar.arrive_and_wait();
 
-    // 2. Tile Minimum Calculation (Optimized Thread Mapping)
+    // 2. Tile minimum calc
     float thread_min = MAX_FLT;
     for (int row = 0; row < TILE_H; ++row) {
         if (block_origin_x + tid < width && block_origin_y + row < height) {
@@ -107,6 +107,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         }
     }
 
+    // Reduction
     for (int offset = 16; offset > 0; offset /= 2) {
         thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
     }
@@ -116,6 +117,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
     __syncthreads();
 
+    // Final min for 1st thread
     if (tid == 0) {
         float final_min = smem_min_pool[0];
         for (int i = 1; i < WARPS_C; ++i) {
@@ -126,9 +128,9 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     __syncthreads();
 
     float norm_factor = max(smem_min_pool[0], MIN_FLT);
-    float inv_norm = 1.0f / norm_factor; // Pre-invert to use multiply instructions instead of costly division
+    float inv_norm = 1.0f / norm_factor; // instead of division
 
-    // 3. Vectorized Stencil Computation & Writeback
+    // 3. Using vector computation instead
     // Thread block layout (32x4) maps to 32 independent processing units.
     // Instead of grid-striding by 32 single pixels, we stride by 32 chunks of *4 pixels* (float4).
     // Loop steps 0 -> (128 total width / 4 elements per vector / 32 threads) = 1 iteration required per row!
@@ -137,37 +139,40 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     int target_x = block_origin_x + target_lx;
     int smem_center_x = target_lx + HALO_L;
 
-    // Loop over the 8 rows assigned to this thread warp level
+    // Loop 8 rows
     #pragma unroll
     for (int step = 0; step < 8; ++step) {
         int target_ly = threadIdx.y * 8 + step;
         int target_y = block_origin_y + target_ly;
 
-        // Verify boundary safety for the primary pointer structure
+        // Check bounds
         if (target_y < height && target_x < width) {
             
-            // Vector elements to fill accumulator block
+            // Using a 4D vector
             float4 acc = make_float4(0.0f, 0.0f, 0.0f, 0.0f);
             int smem_center_y = target_ly + HALO_L;
 
-            // Stencil loops using exact bounds to prompt automatic compiler unrolling
-            #pragma unroll 16
+            // Unrolling 
+            // *** Warning, please be aware of the HALO size !!
+            #pragma unroll HALO_ALL
             for (int dy = -7; dy <= 8; ++dy) {
                 int current_smem_y = smem_center_y + dy;
 
-                #pragma unroll 16
+                #pragma unroll HALO_ALL
                 for (int dx = -7; dx <= 8; ++dx) {
                     float coeff = c_coeffs[dy + 7][dx + 7];
 
-                    // Process Pixel 0
+                    // Manual unroll
+
+                    // Pixel 0
                     float v0 = smem_input[current_smem_y][smem_center_x + dx];
                     acc.x += coeff * (v0 * v0 + 0.25f * v0 + sqrtf(fabsf(v0)));
 
-                    // Process Pixel 1
+                    // Pixel 1
                     float v1 = smem_input[current_smem_y][smem_center_x + dx + 1];
                     acc.y += coeff * (v1 * v1 + 0.25f * v1 + sqrtf(fabsf(v1)));
 
-                    // Process Pixel 2
+                    // Pixel 2
                     float v2 = smem_input[current_smem_y][smem_center_x + dx + 2];
                     acc.z += coeff * (v2 * v2 + 0.25f * v2 + sqrtf(fabsf(v2)));
 
@@ -177,7 +182,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
                 }
             }
 
-            // Normalization mapping
+            // Normalize all vector values
             acc.x *= inv_norm;
             acc.y *= inv_norm;
             acc.z *= inv_norm;
@@ -195,8 +200,8 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
                 if (target_x + 1 < width) output[out_idx + 1] = acc.y;
                 if (target_x + 2 < width) output[out_idx + 2] = acc.z;
             }
-        }
-    }
+        } // Bounds checking
+    } // for (int step = 0; step < 8; ++step)
 }
 
 //////////////////////////////////////////////
