@@ -24,7 +24,7 @@ void cpu_stencil_transform(
         inputSquareRoots[i] = std::sqrt(std::fabs(input[i]));
     }
 
-    std::cout << "Do the tile math on CPU ..." << std::endl;
+    std::cout << "Tiling on CPU (can be very slow)..." << std::endl;
 
     for (int ty = 0; ty < height; ty += TILE_H) {
         int endTileY = ty + TILE_H;

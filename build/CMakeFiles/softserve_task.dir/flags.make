@@ -7,11 +7,11 @@ CUDA_DEFINES =
 
 CUDA_INCLUDES = --options-file CMakeFiles/softserve_task.dir/includes_CUDA.rsp
 
-CUDA_FLAGS =  -lineinfo --use_fast_math -Xptxas=-v -g -G -g -std=c++17 "--generate-code=arch=compute_80,code=[compute_80,sm_80]" "--generate-code=arch=compute_89,code=[compute_89,sm_89]" "--generate-code=arch=compute_90,code=[compute_90,sm_90]"
+CUDA_FLAGS =  -lineinfo --use_fast_math -Xptxas=-v -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_80,code=[compute_80,sm_80]" "--generate-code=arch=compute_89,code=[compute_89,sm_89]" "--generate-code=arch=compute_90,code=[compute_90,sm_90]"
 
 CXX_DEFINES = 
 
 CXX_INCLUDES = -I/home/ivan/Projects/SoftServeStencil/include -I/home/ivan/Projects/SoftServeStencil/tests -isystem /usr/local/cuda/targets/x86_64-linux/include
 
-CXX_FLAGS =  -g -g -std=gnu++17
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17
 

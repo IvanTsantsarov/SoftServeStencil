@@ -159,11 +159,18 @@ CMakeFiles/softserve_task.dir/src/cpu_reference.cpp.o: /home/ivan/Projects/SoftS
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -201,6 +208,8 @@ CMakeFiles/softserve_task.dir/src/cpu_reference.cpp.o: /home/ivan/Projects/SoftS
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
@@ -422,14 +431,23 @@ CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o: /home/ivan/Projects/SoftSer
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/syscall.h \
@@ -466,10 +484,14 @@ CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o: /home/ivan/Projects/SoftSer
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1167,13 +1189,20 @@ CMakeFiles/softserve_task.dir/src/main.cpp.o: /home/ivan/Projects/SoftServeStenc
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1211,6 +1240,8 @@ CMakeFiles/softserve_task.dir/src/main.cpp.o: /home/ivan/Projects/SoftServeStenc
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
@@ -1385,11 +1416,18 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: /home/ivan/Projects/SoftSe
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1428,6 +1466,8 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: /home/ivan/Projects/SoftSe
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1636,11 +1676,18 @@ CMakeFiles/softserve_task.dir/tests/correctness.cpp.o: /home/ivan/Projects/SoftS
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1679,6 +1726,8 @@ CMakeFiles/softserve_task.dir/tests/correctness.cpp.o: /home/ivan/Projects/SoftS
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -1875,11 +1924,18 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
+  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -1917,6 +1973,8 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
@@ -1989,8 +2047,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda/targets/x86_64-linux/include/surface_types.h:
 
 /usr/local/cuda/targets/x86_64-linux/include/sm_61_intrinsics.h:
-
-/usr/local/cuda/targets/x86_64-linux/include/sm_35_intrinsics.h:
 
 /usr/local/cuda/targets/x86_64-linux/include/sm_35_atomic_functions.h:
 
@@ -2280,39 +2336,27 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__limits/numeric_limits_ext.h:
 
-/usr/include/string.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/cp_async_bulk.h:
-
-/usr/local/cuda/targets/x86_64-linux/include/vector_functions.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_const.h:
-
-/usr/include/semaphore.h:
-
-/home/ivan/Projects/SoftServeStencil/include/defines.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/type_list.h:
-
-/usr/include/linux/types.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/make_nbit_int.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memory/address_space.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__iterator/incrementable_traits.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/version.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/type_traits:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/thread_api.h:
 
-/usr/include/stdint.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/namespaces.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_reference.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/has_virtual_destructor.h:
 
-/usr/include/endian.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/cpp_dialect.h:
 
-/usr/include/linux/limits.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/reference_converts_from_temporary.h:
 
-/usr/include/c++/13/ratio:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/atomic.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/add_cv.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__iterator/iterator_traits.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/pair.h:
 
 /usr/include/linux/close_range.h:
 
@@ -2335,8 +2379,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/include/c++/13/bits/stream_iterator.h:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memcpy_async/completion_mechanism.h:
 
 /usr/include/assert.h:
 
@@ -2371,6 +2413,14 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/types/common.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__concepts/assignable.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+
+/usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/fence_proxy_async.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
@@ -2440,9 +2490,23 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/thread_api.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memcpy_async/completion_mechanism.h:
 
-/usr/include/strings.h:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_volatile.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_trivially_move_constructible.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__barrier/async_contract_fulfillment.h:
+
+/usr/include/c++/13/bits/ptr_traits.h:
+
+/usr/include/linux/posix_types.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/ld.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__algorithm/comp.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
@@ -2457,6 +2521,10 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/trap.h:
+
+/usr/include/x86_64-linux-gnu/bits/select2.h:
+
+/usr/include/c++/13/cmath:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__memory/addressof.h:
 
@@ -2546,10 +2614,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/c++/13/debug/debug.h:
 
-/usr/include/c++/13/bits/std_abs.h:
-
-/usr/include/linux/errno.h:
-
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_trivially_copy_constructible.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_convertible.h:
@@ -2596,17 +2660,11 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/c++/13/bits/char_traits.h:
 
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
-
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
 
 /usr/include/c++/13/bits/move.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/reference_converts_from_temporary.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/atomic.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_trivial.h:
 
@@ -2624,12 +2682,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__bit/popcount.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/add_cv.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__iterator/iterator_traits.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/pair.h:
-
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_nothrow_default_constructible.h:
 
 /usr/include/c++/13/bits/exception_defines.h:
@@ -2643,6 +2695,10 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_async_bulk_tensor_multicast.h:
 
 /usr/include/c++/13/backward/binders.h:
+
+/usr/include/c++/13/ratio:
+
+/usr/include/linux/limits.h:
 
 /usr/include/c++/13/cwctype:
 
@@ -2708,6 +2764,14 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_async_bulk_tensor.h:
 
+/home/ivan/Projects/SoftServeStencil/include/defines.h:
+
+/usr/local/cuda/targets/x86_64-linux/include/vector_functions.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_const.h:
+
+/usr/include/semaphore.h:
+
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/nat.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
@@ -2725,12 +2789,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/include/c++/13/bits/ostream.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h:
-
-/usr/include/c++/13/bits/ptr_traits.h:
-
-/usr/include/linux/posix_types.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/ld.h:
 
 /usr/include/c++/13/bits/cxxabi_forced.h:
 
@@ -2757,8 +2815,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
 /home/ivan/Projects/SoftServeStencil/include/cpu_reference.hpp:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__iterator/incrementable_traits.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__utility/ctad_support.h:
 
@@ -2820,11 +2876,9 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__barrier/empty_completion.h:
 
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/fp.h:
 
-/usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/fence_proxy_async.h:
+/usr/include/c++/13/bits/algorithmfwd.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_swappable.h:
 
@@ -2859,6 +2913,8 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/mbarrier_arrive.h:
 
 /usr/include/locale.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
 
@@ -2912,8 +2968,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_reduce_async_bulk_f16.h:
 
-/usr/include/c++/13/cmath:
-
 /usr/include/c++/13/tuple:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
@@ -2925,6 +2979,14 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_array.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__bit/countl.h:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/x86_64-linux-gnu/bits/select-decl.h:
+
+/usr/include/c++/13/bits/invoke.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__floating_point/storage.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/remove_const_ref.h:
 
@@ -2966,7 +3028,11 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/wait/notify_wait.h:
 
-/usr/include/c++/13/initializer_list:
+/usr/include/c++/13/bits/std_abs.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2-decl.h:
 
 /usr/include/c++/13/tr1/bessel_function.tcc:
 
@@ -2982,7 +3048,11 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memcpy_async/memcpy_async_tx.h:
 
-/usr/include/linux/stddef.h:
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/pstl_config.h:
+
+/usr/include/c++/13/cstring:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memcpy_async/try_get_barrier_handle.h:
 
@@ -3052,9 +3122,35 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
 
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
+
 /usr/include/x86_64-linux-gnu/asm/unistd.h:
 
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_reference.h:
+
+/usr/include/endian.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/type_traits:
+
+/usr/include/stdint.h:
+
 /usr/include/pthread.h:
+
+/usr/include/linux/stddef.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/type_list.h:
+
+/usr/include/linux/types.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/make_nbit_int.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__memory/address_space.h:
+
+/usr/include/string.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/cp_async_bulk.h:
+
+/usr/include/strings.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/get_sreg.h:
 
@@ -3074,17 +3170,13 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/c++/13/bits/stl_vector.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
+
 /usr/include/linux/futex.h:
 
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__concepts/swappable.h:
-
-/usr/include/c++/13/cstring:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/pstl_config.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_trivially_default_constructible.h:
 
@@ -3112,7 +3204,25 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/include/x86_64-linux-gnu/bits/stdint-least.h:
 
+/usr/include/c++/13/initializer_list:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/ptx_helper_functions.h:
+
 /usr/include/x86_64-linux-gnu/bits/syscall.h:
+
+/usr/local/cuda/targets/x86_64-linux/include/sm_35_intrinsics.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd-decl.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
+
+/usr/include/x86_64-linux-gnu/bits/errno.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/multimem_st.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__utility/undefined.h:
 
@@ -3134,12 +3244,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__concepts/same_as.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_volatile.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_trivially_move_constructible.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__barrier/async_contract_fulfillment.h:
-
 /usr/include/c++/13/bits/allocator.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__barrier/barrier.h:
@@ -3151,8 +3255,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__cmath/pow2.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/tcgen05_ld.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/namespaces.h:
 
 /usr/include/c++/13/bits/new_allocator.h:
 
@@ -3254,6 +3356,12 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/clusterlaunchcontrol.h:
 
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/features.h:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_async_bulk_commit_group.h:
+
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_async_mbarrier_arrive.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__cccl/system_header.h:
@@ -3271,10 +3379,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__cccl/deprecated.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/exit.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/has_virtual_destructor.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/cpp_dialect.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/fence_mbarrier_init.h:
 
@@ -3348,6 +3452,12 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/tcgen05_mma_ws.h:
 
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_bounded_array.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/reference_wrapper.h:
+
+/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/tcgen05_shift.h:
+
 /usr/include/alloca.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/get_sreg.h:
@@ -3367,10 +3477,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/multimem_red.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/types.h:
-
-/usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/multimem_st.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/red_async.h:
 
@@ -3420,8 +3526,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/ptx_dot_variants.h:
 
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/ptx_helper_functions.h:
-
 /usr/include/c++/13/cstdint:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/st_bulk.h:
@@ -3441,8 +3545,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/pipeline:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/ptx:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__algorithm/comp.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__algorithm/max.h:
 
@@ -3475,6 +3577,8 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/types/locked.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/types/small.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__atomic/wait/polling.h:
 
@@ -3560,10 +3664,6 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__floating_point/cuda_fp_types.h:
 
-/usr/include/c++/13/bits/invoke.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__floating_point/storage.h:
-
 /usr/include/c++/13/bits/chrono.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__floating_point/traits.h:
@@ -3581,19 +3681,3 @@ CMakeFiles/softserve_task.dir/tests/generate.cpp.o: /home/ivan/Projects/SoftServ
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/mbarrier_arrive_expect_tx.h:
 
 /usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__functional/unary_function.h:
-
-/usr/include/c++/13/bits/algorithmfwd.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/fp.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__type_traits/is_bounded_array.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/tcgen05_shift.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__fwd/reference_wrapper.h:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/__ptx/instructions/generated/cp_async_bulk_commit_group.h:
-
-/usr/local/cuda-13.3/targets/x86_64-linux/include/cccl/cuda/std/__internal/features.h:

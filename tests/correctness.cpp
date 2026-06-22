@@ -24,7 +24,7 @@ void correctness(int side) {
     sprintf(file_path, "../res/image%d.ppm", side);
     write_ppm(file_path, side, input);
     
-    std::cout << "Generating coefficients " << COEF_S << "by" << COEF_S << "matrix...\n";
+    std::cout << "Generating coefficients " << COEF_S << "x" << COEF_S << " matrix..." << std::endl;
 
     // generate gradient coeficients
     float coeffs[COEF_S][COEF_S];

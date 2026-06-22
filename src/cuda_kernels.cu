@@ -71,7 +71,8 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 // OPTIMIZED KERNEL IMPLEMENTATION (AMPERE+)
 ////////////////////////////////////////////////////////////////////////////////
 __global__ void __launch_bounds__(128, 4)
-optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height) {
+optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height)
+{
 
     __shared__ cuda::barrier<cuda::thread_scope_block> bar;
     __shared__ float smem_input[SHARED_H][SHARED_W];
@@ -125,7 +126,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         }
         smem_min_pool[0] = final_min;
     }
-    __syncthreads();
+    __syncthreads(); 
 
     
     // In the task this is defined as:

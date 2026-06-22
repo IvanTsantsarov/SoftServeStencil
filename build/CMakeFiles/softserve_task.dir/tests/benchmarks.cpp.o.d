@@ -1,20 +1,9 @@
 CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp \
- /usr/include/stdc-predef.h \
- /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
- /home/ivan/Projects/SoftServeStencil/include/defines.h \
- /home/ivan/Projects/SoftServeStencil/tests/../include/utils.hpp \
- /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
- /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
- /usr/local/cuda/targets/x86_64-linux/include/builtin_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/device_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/crt/host_defines.h \
- /usr/local/cuda/targets/x86_64-linux/include/driver_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/vector_types.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/limits.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/syslimits.h \
- /usr/include/limits.h \
- /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/stdc-predef.h /usr/include/c++/13/iostream \
+ /usr/include/c++/13/bits/requires_hosted.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
@@ -22,39 +11,16 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
- /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
- /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
- /usr/local/cuda/targets/x86_64-linux/include/surface_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/texture_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/library_types.h \
- /usr/local/cuda/targets/x86_64-linux/include/channel_descriptor.h \
- /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime_api.h \
- /usr/local/cuda/targets/x86_64-linux/include/cuda_device_runtime_api.h \
- /usr/local/cuda/targets/x86_64-linux/include/driver_functions.h \
- /usr/local/cuda/targets/x86_64-linux/include/vector_functions.h \
- /usr/local/cuda/targets/x86_64-linux/include/vector_functions.hpp \
- /usr/include/c++/13/utility \
- /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
- /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
- /usr/include/c++/13/pstl/pstl_config.h \
- /usr/include/c++/13/bits/stl_relops.h \
- /usr/include/c++/13/bits/stl_pair.h /usr/include/c++/13/type_traits \
- /usr/include/c++/13/bits/move.h /usr/include/c++/13/bits/utility.h \
- /usr/include/c++/13/initializer_list /usr/include/c++/13/iostream \
- /usr/include/c++/13/bits/requires_hosted.h /usr/include/c++/13/ostream \
+ /usr/include/c++/13/pstl/pstl_config.h /usr/include/c++/13/ostream \
  /usr/include/c++/13/ios /usr/include/c++/13/iosfwd \
  /usr/include/c++/13/bits/stringfwd.h \
  /usr/include/c++/13/bits/memoryfwd.h /usr/include/c++/13/bits/postypes.h \
  /usr/include/c++/13/cwchar /usr/include/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
@@ -64,12 +30,16 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar2.h \
  /usr/include/c++/13/exception /usr/include/c++/13/bits/exception.h \
  /usr/include/c++/13/bits/exception_ptr.h \
  /usr/include/c++/13/bits/exception_defines.h \
  /usr/include/c++/13/bits/cxxabi_init_exception.h \
  /usr/include/c++/13/typeinfo /usr/include/c++/13/bits/hash_bytes.h \
- /usr/include/c++/13/new /usr/include/c++/13/bits/nested_exception.h \
+ /usr/include/c++/13/new /usr/include/c++/13/bits/move.h \
+ /usr/include/c++/13/type_traits \
+ /usr/include/c++/13/bits/nested_exception.h \
  /usr/include/c++/13/bits/char_traits.h \
  /usr/include/c++/13/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
@@ -106,6 +76,7 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/setjmp.h \
  /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
  /usr/include/x86_64-linux-gnu/sys/single_threaded.h \
  /usr/include/c++/13/bits/locale_classes.h /usr/include/c++/13/string \
@@ -127,10 +98,12 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/c++/13/backward/binders.h \
  /usr/include/c++/13/ext/numeric_traits.h \
  /usr/include/c++/13/bits/stl_algobase.h \
+ /usr/include/c++/13/bits/stl_pair.h /usr/include/c++/13/bits/utility.h \
  /usr/include/c++/13/debug/debug.h \
  /usr/include/c++/13/bits/predefined_ops.h /usr/include/c++/13/bit \
  /usr/include/c++/13/bits/refwrap.h /usr/include/c++/13/bits/invoke.h \
  /usr/include/c++/13/bits/range_access.h \
+ /usr/include/c++/13/initializer_list \
  /usr/include/c++/13/bits/basic_string.h \
  /usr/include/c++/13/ext/alloc_traits.h \
  /usr/include/c++/13/bits/alloc_traits.h \
@@ -147,16 +120,22 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
- /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
+ /usr/include/x86_64-linux-gnu/bits/select-decl.h /usr/include/alloca.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h \
  /usr/include/c++/13/bits/std_abs.h /usr/include/c++/13/cstdio \
  /usr/include/stdio.h /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/c++/13/cerrno /usr/include/errno.h \
- /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
- /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/13/cerrno \
+ /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/13/bits/charconv.h \
@@ -192,4 +171,32 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/c++/13/bits/locale_conv.h \
  /usr/include/c++/13/bits/quoted_string.h /usr/include/c++/13/sstream \
  /usr/include/c++/13/bits/sstream.tcc \
- /home/ivan/Projects/SoftServeStencil/include/defines.h
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
+ /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
+ /home/ivan/Projects/SoftServeStencil/tests/../include/utils.hpp \
+ /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
+ /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
+ /usr/local/cuda/targets/x86_64-linux/include/builtin_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/device_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/crt/host_defines.h \
+ /usr/local/cuda/targets/x86_64-linux/include/driver_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/vector_types.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+ /usr/local/cuda/targets/x86_64-linux/include/surface_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/texture_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/library_types.h \
+ /usr/local/cuda/targets/x86_64-linux/include/channel_descriptor.h \
+ /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime_api.h \
+ /usr/local/cuda/targets/x86_64-linux/include/cuda_device_runtime_api.h \
+ /usr/local/cuda/targets/x86_64-linux/include/driver_functions.h \
+ /usr/local/cuda/targets/x86_64-linux/include/vector_functions.h \
+ /usr/local/cuda/targets/x86_64-linux/include/vector_functions.hpp \
+ /usr/include/c++/13/utility /usr/include/c++/13/bits/stl_relops.h

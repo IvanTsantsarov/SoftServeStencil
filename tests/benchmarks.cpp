@@ -1,9 +1,11 @@
-#include "cuda_kernels.cuh"
-#include "../include/utils.hpp"
 #include <iostream>
 #include <vector>
 #include <iomanip>
+
 #include "defines.h"
+#include "cuda_kernels.cuh"
+#include "../include/utils.hpp"
+
 
 void benchmark(int size) {
     int all = size * size;
@@ -44,12 +46,12 @@ void benchmark(int size) {
     double estimated_flop = double(all) * 256.0 * 5.0;
     double gflops = (estimated_flop / (optimized_time / 1000.0)) / 1e9;
 
-    std::cout << std::setw(10) << size << "x" << size
-              << std::setw(15) << baseline_time << " ms"
-              << std::setw(15) << optimized_time << " ms"
-              << std::setw(12) << (baseline_time / optimized_time) << "x"
-              << std::setw(15) << effective_bandwidth_gb_s
-              << std::setw(15) << gflops << std::endl;
+    std::cout << std::setw(10) << size
+            << std::setw(19) << (std::to_string(baseline_time) + " ms")
+            << std::setw(19) << (std::to_string(optimized_time) + " ms")
+            << std::setw(14) << (std::to_string(baseline_time / optimized_time) + "x")
+            << std::setw(16) << effective_bandwidth_gb_s
+            << std::setw(16) << gflops << std::endl;
 
     CUDA_CHECK(cudaFree(d_input));
     CUDA_CHECK(cudaFree(d_output));
