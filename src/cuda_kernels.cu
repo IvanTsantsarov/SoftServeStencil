@@ -31,11 +31,11 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 
     if (tx >= width || ty >= height) return;
 
-    // Phase 1: Compute tile minimum via unoptimized loop scan
-    // shared mem access used 20-30 clock ticks
+    // Phase 1: Fixed sequential scan bounds to match CPU exactly (only 1 TILE_W)
     float tile_min = MAX_FLT;
     int y_end = ty + TILE_H;
-    int x_end = tx + TILE_W;
+    int x_end = tx + TILE_W; 
+    
     for (int y = ty; y < y_end && y < height; ++y) {
         for (int x = tx; x < x_end && x < width; ++x) {
             float v = input[y * width + x];
@@ -44,20 +44,26 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
     }
     float norm_factor = max(tile_min, MIN_FLT);
 
-    // Phase 2: Compute Stencil
-    int x = blockIdx.x * TILE_W + threadIdx.x;
-    int y = blockIdx.y * TILE_H + threadIdx.y;
+    // Phase 2: Grid-stride loop to make 32x4 threads process all 128x32 pixels
+    for (int local_y = threadIdx.y; local_y < TILE_H; local_y += blockDim.y) {
+        for (int local_x = threadIdx.x; local_x < TILE_W; local_x += blockDim.x) {
+            
+            int x = tx + local_x;
+            int y = ty + local_y;
 
-    if (x < width && y < height) {
-        float acc = 0.0f;
-        for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
-            for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
-                float v = fetch_pixel(input, x + dx, y + dy, width, height);
-                float transformed = v * v + 0.25f * v + sqrtf(fabsf(v));
-                acc += c_coeffs[dy + 7][dx + 7] * transformed;
+            if (x < width && y < height) {
+                float acc = 0.0f;
+                for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
+                    for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
+                        // Ensure fetch_pixel uses identical clamp-to-edge logic as CPU!
+                        float v = fetch_pixel(input, x + dx, y + dy, width, height);
+                        float transformed = v * v + 0.25f * v + sqrtf(fabsf(v));
+                        acc += c_coeffs[dy + 7][dx + 7] * transformed;
+                    }
+                }
+                output[y * width + x] = acc / norm_factor;
             }
         }
-        output[y * width + x] = acc / norm_factor;
     }
 }
 

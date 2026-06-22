@@ -70,6 +70,11 @@ void correctness(int side) {
 
         if (abs_err > max_abs_err) max_abs_err = abs_err;
         if (rel_err > max_rel_err) max_rel_err = rel_err;
+
+        // printout wrong values
+        if (max_abs_err >= MAX_ERR || max_rel_err >= MAX_ERR) { 
+            std::cout << i << "=>" << cpu_output[i] << ',' << gpu_output[i] << '|';// << std::endl;
+        }
     }
 
     std::cout << "Test Dimensions: " << side << "x" << side << " -> ";
@@ -77,13 +82,6 @@ void correctness(int side) {
         std::cout << "PASSED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
     } else {
         std::cout << "FAILED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
-
-        // let's see you failed
-        for( int i = 0; i < all; i ++) {
-            // std::cout << cpu_output[i] << ',' << gpu_output[i] << '|';// << std::endl;
-            std::cout << gpu_output[i] << '|';// << std::endl;
-        }
-
         exit(1);
     }
 
