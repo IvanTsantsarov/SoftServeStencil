@@ -73,21 +73,20 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 __global__ void __launch_bounds__(128, 4)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height) {
 
-    // Allocate without an explicit initialization expression (ugly)
-    // to avoid the warning or just suppress it like I did
+    // Allocate without explicit initialization to avoid warnings
     __shared__ cuda::barrier<cuda::thread_scope_block> bar;
 
     // Allocate shared memory for async loading
     __shared__ float smem_input[SHARED_H][SHARED_W];
     __shared__ float smem_min_pool[WARPS_C]; // One min value per warp
 
-    int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
+    int tid = threadIdx.y * blockDim.x + threadIdx.x; // Global thread ID in block (0 to 127)
     
     // Initialize the barrier on thread 0 BEFORE anyone uses it
     if (tid == 0) {
-        init(&bar, blockDim.x * blockDim.y); // Pass total block threads
+        init(&bar, blockDim.x * blockDim.y); 
     }
-    // We must sync the block here so all threads know the barrier is ready
+    // Sync the block to ensure the barrier object is fully initialized
     __syncthreads();     
     
     int block_origin_x = blockIdx.x * TILE_W;
@@ -115,28 +114,24 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
     
     bar.arrive_and_wait();
-    // __syncthreads(); // not needed when there is a barrier
 
     //////////////////////////////////////////////////////////
     // Warp Shuffle Reductions to calculate tile minimum value
 
-    // Step 1: Each thread finds its local min
+    // FIX 1: Map all 128 threads sequentially to cover all 128 tile columns
     float thread_min = MAX_FLT;
-    int local_x = threadIdx.x; // Threads mapped 0 to 31 directly matches tile columns
-    int local_y_start = threadIdx.y * 8; // Thread block is 32x4. Each warp works on 8 rows.
+    int local_x = tid; // 0 to 127 covers TILE_W completely
 
-    for (int row = 0; row < HALO_S; ++row) {
-        int ly = local_y_start + row;
-        if (block_origin_x + local_x < width && block_origin_y + ly < height) {
-            float v = smem_input[ly + HALO_L][local_x + HALO_L];
+    for (int row = 0; row < TILE_H; ++row) {
+        if (block_origin_x + local_x < width && block_origin_y + row < height) {
+            float v = smem_input[row + HALO_L][local_x + HALO_L];
             thread_min = min(thread_min, v);
         }
     }
 
-    unsigned int active_mask = __activemask();
-    // #pragma unroll
+    // FIX 2: Use an explicit full mask (0xFFFFFFFF) to prevent shuffle stalls
     for (int offset = 16; offset > 0; offset /= 2) {
-        thread_min = min(thread_min, __shfl_down_sync(active_mask, thread_min, offset));
+        thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
     }
 
     // Step 3: Master thread of each warp writes to shared cache pool
@@ -145,62 +140,58 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     }
     __syncthreads();
 
-    // Step D: Warp 0 resolves final tile minimum
-    float global_tile_min = smem_min_pool[0];
-    if (threadIdx.y == 0 && threadIdx.x < 4) {
-        global_tile_min = min(global_tile_min, smem_min_pool[threadIdx.x]);
-        for (int offset = 2; offset > 0; offset /= 2) {
-            global_tile_min = min(global_tile_min, __shfl_down_sync(0xF, global_tile_min, offset));
+    // FIX 3: Safe, sequential resolution on thread 0 to eliminate inter-warp shuffle bugs
+    if (tid == 0) {
+        float final_min = smem_min_pool[0];
+        for (int i = 1; i < WARPS_C; ++i) {
+            final_min = min(final_min, smem_min_pool[i]);
         }
-        if (threadIdx.x == 0) {
-            smem_min_pool[0] = global_tile_min;
-        }
+        smem_min_pool[0] = final_min;
     }
     __syncthreads();
 
     float norm_factor = max(smem_min_pool[0], MIN_FLT);
 
-    // Allocate a register array for x row
+    // Allocate a register array for the current row
     float local_row[HALO_ALL]; 
 
     // 3. Stencil Computation using Cached Shared Memory Matrix
-    // Process 32x128 Tile using a 32x4 thread layout (Looping 8 times over Y dimension)
-    int target_x = block_origin_x + threadIdx.x;
-    int smem_center_x = threadIdx.x + HALO_L;
-    for (int step = 0; step < 8; ++step) {
-        int target_ly = threadIdx.y * 8 + step;
-        int target_y = block_origin_y + target_ly;
+    // Use a grid-stride loop over X so 32x4 threads span the 128-column tile width
+    for (int col_step = 0; col_step < 4; ++col_step) {
+        int target_lx = col_step * 32 + threadIdx.x; // Marches across 0 to 127
+        int target_x = block_origin_x + target_lx;
+        int smem_center_x = target_lx + HALO_L;
 
-        if (target_x < width && target_y < height) {
-            float acc = 0.0f;
-            int smem_center_y = target_ly + HALO_L;
+        for (int step = 0; step < 8; ++step) {
+            int target_ly = threadIdx.y * 8 + step;
+            int target_y = block_origin_y + target_ly;
 
-            // #pragma unroll 16 // Too many unrols alongside with dx loop
-            // it can put pressure on registers file
-            for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
-                int current_smem_y = smem_center_y + dy;
+            if (target_x < width && target_y < height) {
+                float acc = 0.0f;
+                int smem_center_y = target_ly + HALO_L;
 
-                // Copy current row into registers for each warp to use it
-                // in the upcomming dx itterations
-                #pragma unroll
-                for (int dx = -7; dx <= 8; ++dx) {
-                    local_row[dx + 7] = smem_input[current_smem_y][smem_center_x + dx];
+                for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
+                    int current_smem_y = smem_center_y + dy;
+
+                    // Copy current row into registers to reuse across dx iterations
+                    #pragma unroll
+                    for (int dx = -7; dx <= 8; ++dx) {
+                        local_row[dx + 7] = smem_input[current_smem_y][smem_center_x + dx];
+                    }
+
+                    #pragma unroll
+                    for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
+                        int dx_offset = dx + 7;
+                        float v = local_row[dx_offset]; 
+                        
+                        // SFU evaluates fast sqrt calculations
+                        float transformed = v * v + 0.25f * v + sqrtf(fabsf(v)); 
+                        
+                        acc += c_coeffs[dy + 7][dx_offset] * transformed;
+                    }
                 }
-
-                #pragma unroll
-                for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
-                    int dx_offset = dx + 7;
-                    // Read directly out of our zero-latency register array
-                    float v = local_row[dx_offset]; 
-                    
-                    // SFU will elliminate the need of sqrt lookup table like in CPU
-                    float transformed = v * v + 0.25f * v + sqrtf(fabsf(v)); 
-                    
-                    // accumilate the result
-                    acc += c_coeffs[dy + 7][dx_offset] * transformed;
-                }
+                output[target_y * width + target_x] = acc / norm_factor;
             }
-            output[target_y * width + target_x] = acc / norm_factor;
         }
     }
 }
