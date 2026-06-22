@@ -2,6 +2,8 @@
 #include "../include/cpu_reference.hpp"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
+
 
 void cpu_stencil_transform(
     const float* input,
@@ -13,11 +15,16 @@ void cpu_stencil_transform(
     int height_1 = height - 1;
     int width_1 = width - 1;
 
+    std::cout << "Precalculate sqares of the input..." << std::endl;
+
     // First, compute the square root of the absolute value of the input for all pixels
     float inputSquareRoots[height * width];
-    for (int i = 0; i < height * width; ++i) {
+    int all = height * width;
+    for (int i = 0; i < all; ++i) {
         inputSquareRoots[i] = std::sqrt(std::fabs(input[i]));
     }
+
+    std::cout << "Do the tile math ..." << std::endl;
 
     for (int ty = 0; ty < height; ty += TILE_H) {
         int endTileY = ty + TILE_H;
@@ -36,16 +43,19 @@ void cpu_stencil_transform(
             // 2. Compute stencil transformation & normalization
             for (int y = ty; y < std::min(endTileY, height); ++y) {
                 for (int x = tx; x < std::min(endTileX, width); ++x) {
-                    float acc = 0.0f;
 
+                    float acc = 0.0f;
                     for (int dy = -7; dy <= 8; ++dy) {
+                        
                         int ny = y + dy;
+                        // out-of-bounds clamp y
+                        ny = std::max(0, std::min(height_1, ny));
                         int offsetY = ny * width;
+                        
                         for (int dx = -7; dx <= 8; ++dx) {
                             int nx = x + dx;
 
-                            // Out-of-bounds clamp to edge strategy
-                            ny = std::max(0, std::min(height_1, ny));
+                            // out-of-bounds clamp x
                             nx = std::max(0, std::min(width_1, nx));
 
                             int offset = offsetY + nx;
@@ -61,5 +71,7 @@ void cpu_stencil_transform(
 
         }
     }
+
+    std::cout << "CPU stencil finished." << std::endl;
 }
 

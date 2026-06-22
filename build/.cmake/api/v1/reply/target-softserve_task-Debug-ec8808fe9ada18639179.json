@@ -49,7 +49,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++17"
+					"fragment" : " -g -g -std=gnu++17"
 				}
 			],
 			"includes" : 
@@ -90,7 +90,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -lineinfo --use_fast_math -Xptxas=-v -g -std=c++17 \"--generate-code=arch=compute_80,code=[compute_80,sm_80]\" \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" \"--generate-code=arch=compute_90,code=[compute_90,sm_90]\""
+					"fragment" : " -lineinfo --use_fast_math -Xptxas=-v -g -G -g -std=c++17 \"--generate-code=arch=compute_80,code=[compute_80,sm_80]\" \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" \"--generate-code=arch=compute_90,code=[compute_90,sm_90]\""
 				}
 			],
 			"includes" : 
@@ -130,7 +130,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-g -g",
 				"role" : "flags"
 			},
 			{

@@ -1,0 +1,18 @@
+ 
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CUDA/CPU Debug: softserve_task",
+            "type": "cuda-gdb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/softserve_task",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "debuggerPath": "/usr/local/cuda/bin/cuda-gdb"
+        }
+    ]
+}

@@ -35,3 +35,9 @@ target_link_libraries(softserve_task PRIVATE
     CUDA::cudart 
     CUDA::cuda_driver
 )
+
+# Add debug flags if building in Debug mode
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    string(APPEND CMAKE_CUDA_FLAGS " -g -G") # -g for CPU host debug, -G for GPU device debug
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+endif()

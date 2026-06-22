@@ -5,7 +5,7 @@
 
 #define CUDA_CHECK(call)                                                            \
     do {                                                                            \
-        std::cout << "Executing:" << __FILE__ << ":" << __LINE__ << std::endl;      \
+        /* std::cout << "Executing:" << __FILE__ << ":" << __LINE__ << std::endl;*/ \
         cudaError_t err = call;                                                     \
         if (err != cudaSuccess) {                                                   \
             std::cerr << "CUDA Error at " << __FILE__ << ":" << __LINE__            \

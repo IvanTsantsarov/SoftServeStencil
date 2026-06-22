@@ -35,9 +35,9 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
     // shared mem access used 20-30 clock ticks
     float tile_min = MAX_FLT;
     int y_end = ty + TILE_H;
-    int x_end = tx + TILE_H;
+    int x_end = tx + TILE_W;
     for (int y = ty; y < y_end && y < height; ++y) {
-        for (int x = tx; x < x_end + TILE_W && x < width; ++x) {
+        for (int x = tx; x < x_end && x < width; ++x) {
             float v = input[y * width + x];
             if (v < tile_min) tile_min = v;
         }
@@ -203,7 +203,9 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 // NON OPTIMAZED (BASELINE) KERNEL LAUNCH
 //////////////////////////////////////////////
 // not using std::function or CUfunction just to intuitive
-void launch_baseline_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
+void launch_baseline_kernel(const float* d_input, float* d_output, int width, int height, 
+    const float h_coeffs[COEF_S][COEF_S], float& elapsed_ms) {
+
     CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
     dim3 threadsPerBlock(32, 4); // Fixed layout targeting 128 elements inside loop structures
@@ -218,6 +220,7 @@ void launch_baseline_kernel(const float* d_input, float* d_output, int width, in
     CUDA_CHECK(cudaEventRecord(stop));
 
     CUDA_CHECK(cudaEventSynchronize(stop));
+    CUDA_CHECK(cudaGetLastError());
     CUDA_CHECK(cudaEventElapsedTime(&elapsed_ms, start, stop));
 
     CUDA_CHECK(cudaEventDestroy(start));

@@ -3,21 +3,26 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include "defines.h"
 
 void benchmark(int size) {
-    int N = size * size;
-    std::vector<float> h_input(N, 1.25f);
+    int all = size * size;
+    std::vector<float> h_input(all, 1.25f);
 
-    float h_coeffs[16][16];
-    for(int i=0; i<16; ++i) {
-        for(int j=0; j<16; ++j) h_coeffs[i][j] = 0.0039f; // Balanced mock constants
+    float h_coeffs[COEF_S][COEF_S];
+    
+    for(int i=0; i < COEF_S; ++i) {
+        for(int j=0; j < COEF_S; ++j) {
+            // Balanced mock constants
+            h_coeffs[i][j] = 0.0039f; 
+        } 
     }
 
     float *d_input, *d_output;
-    CUDA_CHECK(cudaMalloc(&d_input, N * sizeof(float)));
-    CUDA_CHECK(cudaMalloc(&d_output, N * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&d_input, all * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&d_output, all * sizeof(float)));
 
-    CUDA_CHECK(cudaMemcpy(d_input, h_input.data(), N * sizeof(float), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(d_input, h_input.data(), all * sizeof(float), cudaMemcpyHostToDevice));
 
     float baseline_time = 0.0f;
     float optimized_time = 0.0f;
@@ -32,11 +37,11 @@ void benchmark(int size) {
 
     // Compute metrics
     // Read Input + Write Output + Stencil overlapping footprint
-    double bytes_transferred = 2.0 * N * sizeof(float);
+    double bytes_transferred = 2.0 * all * sizeof(float);
     double effective_bandwidth_gb_s = (bytes_transferred / (optimized_time / 1000.0)) / 1e9;
 
     // Arithmetic estimation: 16x16=256 steps. Each step has ~5 floating point operations
-    double estimated_flop = double(N) * 256.0 * 5.0;
+    double estimated_flop = double(all) * 256.0 * 5.0;
     double gflops = (estimated_flop / (optimized_time / 1000.0)) / 1e9;
 
     std::cout << std::setw(10) << size << "x" << size

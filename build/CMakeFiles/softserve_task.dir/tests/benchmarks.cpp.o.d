@@ -2,6 +2,7 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /home/ivan/Projects/SoftServeStencil/tests/benchmarks.cpp \
  /usr/include/stdc-predef.h \
  /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
  /home/ivan/Projects/SoftServeStencil/tests/../include/utils.hpp \
  /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
  /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
@@ -190,4 +191,5 @@ CMakeFiles/softserve_task.dir/tests/benchmarks.cpp.o: \
  /usr/include/c++/13/bits/locale_facets_nonio.tcc \
  /usr/include/c++/13/bits/locale_conv.h \
  /usr/include/c++/13/bits/quoted_string.h /usr/include/c++/13/sstream \
- /usr/include/c++/13/bits/sstream.tcc
+ /usr/include/c++/13/bits/sstream.tcc \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h

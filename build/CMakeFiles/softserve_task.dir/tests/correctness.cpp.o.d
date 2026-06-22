@@ -4,6 +4,7 @@ CMakeFiles/softserve_task.dir/tests/correctness.cpp.o: \
  /home/ivan/Projects/SoftServeStencil/include/cpu_reference.hpp \
  /home/ivan/Projects/SoftServeStencil/include/cuda_kernels.cuh \
  /home/ivan/Projects/SoftServeStencil/include/defines.h \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
  /home/ivan/Projects/SoftServeStencil/include/utils.hpp \
  /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
  /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \

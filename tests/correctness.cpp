@@ -10,7 +10,7 @@
 void correctness(int side) {
     int all = side * side;
 
-    std::cout << "Correctness test on " << side << "by" << side << "image...\n";
+    std::cout << "Correctness test on " << side << "x" << side << " image...\n";
     
     std::vector<float> cpu_output(all, 0.0f);
     std::vector<float> gpu_output(all, 0.0f);
@@ -43,16 +43,19 @@ void correctness(int side) {
     // Execute reference validation pipeline
     cpu_stencil_transform(input.data(), cpu_output.data(), side, side, coeffs);
 
-    float *d_input, *d_output;
-    CUDA_CHECK(cudaMalloc(&d_input, all * sizeof(float)));
-    CUDA_CHECK(cudaMalloc(&d_output, all * sizeof(float)));
-    CUDA_CHECK(cudaMemcpy(d_input, input.data(), all * sizeof(float), cudaMemcpyHostToDevice));
+    float *d_input = nullptr;
+    float *d_output = nullptr;
+    int all_floats = all * sizeof(float);
+    CUDA_CHECK(cudaMalloc(&d_input, all_floats));
+    CUDA_CHECK(cudaMalloc(&d_output, all_floats));
+    CUDA_CHECK(cudaMemcpy(d_input, input.data(), all_floats, cudaMemcpyHostToDevice));
 
-    float dummy_t = 0.0f;
+    // Currently not measured
+    float elapsed_ms = 0.0f;
 
     std::cout << "Performing GPU kernel exec..."<< "\n";
     // launcoptimized_kernel(d_input, d_output, size, size, coeffs, dummy_t);
-    launch_baseline_kernel(d_input, d_output, side, side, coeffs, dummy_t);
+    launch_baseline_kernel(d_input, d_output, side, side, coeffs, elapsed_ms);
 
     CUDA_CHECK(cudaMemcpy(gpu_output.data(), d_output, all * sizeof(float), cudaMemcpyDeviceToHost));
 
@@ -74,6 +77,13 @@ void correctness(int side) {
         std::cout << "PASSED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
     } else {
         std::cout << "FAILED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
+
+        // let's see you failed
+        for( int i = 0; i < all; i ++) {
+            // std::cout << cpu_output[i] << ',' << gpu_output[i] << '|';// << std::endl;
+            std::cout << gpu_output[i] << '|';// << std::endl;
+        }
+
         exit(1);
     }
 
