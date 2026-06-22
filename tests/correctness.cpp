@@ -28,10 +28,15 @@ void correctness(int side) {
 
     // generate gradient coeficients
     float coeffs[COEF_S][COEF_S];
-    for (int i = 0; i < COEF_S; ++i) {
-        for (int j = 0; j < COEF_S; ++j) coeffs[i][j] = (float)i*j * (1.0f / COEF_ALL);
-    }
 
+    // Generate a 16x16 Emboss filter
+    float center = 7.5f;
+    for (int i = 0; i < COEF_S; ++i) {
+        for (int j = 0; j < COEF_S; ++j) {
+            // Values are positive on one side of the diagonal, negative on the other
+            coeffs[i][j] = ((j - center) + (i - center)) * 0.01f;
+        }
+    }
     std::cout << "Performing CPU stencil transform..."<< "\n";
 
     // Execute reference validation pipeline

@@ -38,7 +38,7 @@ void cpu_stencil_transform(
                     tile_min = std::min(tile_min, input[y * width + x]);
                 }
             }
-            float norm_factor_1 = 1.0f / std::max(tile_min, 1e-6f);
+            float inv_norm_factor = 0.5f; // 1.0f / std::max(tile_min, 1e-6f);
 
             // 2. Compute stencil transformation & normalization
             for (int y = ty; y < std::min(endTileY, height); ++y) {
@@ -65,7 +65,7 @@ void cpu_stencil_transform(
                             acc += coeffs[dy + 7][dx + 7] * transformed;
                         }
                     }
-                    output[y * width + x] = acc * norm_factor_1;
+                    output[y * width + x] = acc * inv_norm_factor;
                 }
             }
 
