@@ -251,6 +251,7 @@ void launch_optimized_kernel(const float* d_input, float* d_output, int width, i
     CUDA_CHECK(cudaEventRecord(stop));
 
     CUDA_CHECK(cudaEventSynchronize(stop));
+    CUDA_CHECK(cudaGetLastError());
     CUDA_CHECK(cudaEventElapsedTime(&elapsed_ms, start, stop));
 
     CUDA_CHECK(cudaEventDestroy(start));

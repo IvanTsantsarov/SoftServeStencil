@@ -15,16 +15,16 @@ void cpu_stencil_transform(
     int height_1 = height - 1;
     int width_1 = width - 1;
 
-    std::cout << "Precalculate sqares of the input..." << std::endl;
+    std::cout << "Precalculate squares of the input..." << std::endl;
 
     // First, compute the square root of the absolute value of the input for all pixels
-    float inputSquareRoots[height * width];
     int all = height * width;
+    float* inputSquareRoots = new float[all];
     for (int i = 0; i < all; ++i) {
         inputSquareRoots[i] = std::sqrt(std::fabs(input[i]));
     }
 
-    std::cout << "Do the tile math ..." << std::endl;
+    std::cout << "Do the tile math on CPU ..." << std::endl;
 
     for (int ty = 0; ty < height; ty += TILE_H) {
         int endTileY = ty + TILE_H;
@@ -32,7 +32,7 @@ void cpu_stencil_transform(
             int endTileX = tx + TILE_W;
 
             // 1. Compute tile minimum
-            float tile_min = 1e37f;
+            float tile_min = MAX_FLT;
             for (int y = ty; y < std::min(endTileY, height); ++y) {
                 for (int x = tx; x < std::min(endTileX, width); ++x) {
                     tile_min = std::min(tile_min, input[y * width + x]);
@@ -71,6 +71,8 @@ void cpu_stencil_transform(
 
         }
     }
+
+    delete [] inputSquareRoots;
 
     std::cout << "CPU stencil finished." << std::endl;
 }

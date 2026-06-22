@@ -48,8 +48,8 @@ void correctness(int side) {
     float elapsed_ms = 0.0f;
 
     std::cout << "Performing GPU kernel exec..."<< "\n";
-    // launcoptimized_kernel(d_input, d_output, size, size, coeffs, dummy_t);
-    launch_baseline_kernel(d_input, d_output, side, side, coeffs, elapsed_ms);
+    launch_optimized_kernel(d_input, d_output, side, side, coeffs, elapsed_ms);
+    // launch_baseline_kernel(d_input, d_output, side, side, coeffs, elapsed_ms);
 
     CUDA_CHECK(cudaMemcpy(gpu_output.data(), d_output, all * sizeof(float), cudaMemcpyDeviceToHost));
 
@@ -88,6 +88,14 @@ void correctness(int side) {
 
     CUDA_CHECK(cudaFree(d_input));
     CUDA_CHECK(cudaFree(d_output));
+
+    char ppm_path[256] = {0};
+
+    sprintf( ppm_path, "../res/cpu%d.ppm", side);
+    write_ppm( ppm_path, side, cpu_output );
+
+    sprintf( ppm_path, "../res/gpu%d.ppm", side);
+    write_ppm( ppm_path, side, gpu_output );
 
     std::cout << "Correctnes test finished!"<< "\n";
 }
