@@ -73,74 +73,49 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 __global__ void __launch_bounds__(128, 4)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height) {
 
-    // Allocate without explicit initialization to avoid warnings
     __shared__ cuda::barrier<cuda::thread_scope_block> bar;
-
-    // Allocate shared memory for async loading
     __shared__ float smem_input[SHARED_H][SHARED_W];
-    __shared__ float smem_min_pool[WARPS_C]; // One min value per warp
+    __shared__ float smem_min_pool[WARPS_C];
 
-    int tid = threadIdx.y * blockDim.x + threadIdx.x; // Global thread ID in block (0 to 127)
+    int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
     
-    // Initialize the barrier on thread 0 BEFORE anyone uses it
     if (tid == 0) {
         init(&bar, blockDim.x * blockDim.y); 
     }
-    // Sync the block to ensure the barrier object is fully initialized
     __syncthreads();     
     
     int block_origin_x = blockIdx.x * TILE_W;
     int block_origin_y = blockIdx.y * TILE_H;
 
-    // Asynchronous global to shared memory (Ampere+)
+    // 1. Asynchronous Copy (Unchanged)
     int total_elements = SHARED_W * SHARED_H;
     for (int i = tid; i < total_elements; i += 128) {
         int smem_y = i / SHARED_W;
         int smem_x = i % SHARED_W;
+        int glob_x = max(0, min(width - 1, block_origin_x - HALO_L + smem_x));
+        int glob_y = max(0, min(height - 1, block_origin_y - HALO_L + smem_y));
 
-        int glob_x = block_origin_x - HALO_L + smem_x;
-        int glob_y = block_origin_y - HALO_L + smem_y;
-
-        // Secure clamp-to-edge
-        glob_x = max(0, min(width - 1, glob_x));
-        glob_y = max(0, min(height - 1, glob_y));
-
-        // Direct pipeline asynchronous memory transfer
-        cuda::memcpy_async(
-            &smem_input[smem_y][smem_x], 
-            &input[glob_y * width + glob_x], 
-            sizeof(float),
-            bar);
+        cuda::memcpy_async(&smem_input[smem_y][smem_x], &input[glob_y * width + glob_x], sizeof(float), bar);
     }
-    
     bar.arrive_and_wait();
 
-    //////////////////////////////////////////////////////////
-    // Warp Shuffle Reductions to calculate tile minimum value
-
-    // FIX 1: Map all 128 threads sequentially to cover all 128 tile columns
+    // 2. Tile Minimum Calculation (Optimized Thread Mapping)
     float thread_min = MAX_FLT;
-    int local_x = tid; // 0 to 127 covers TILE_W completely
-
     for (int row = 0; row < TILE_H; ++row) {
-        if (block_origin_x + local_x < width && block_origin_y + row < height) {
-            float v = smem_input[row + HALO_L][local_x + HALO_L];
-            thread_min = min(thread_min, v);
+        if (block_origin_x + tid < width && block_origin_y + row < height) {
+            thread_min = min(thread_min, smem_input[row + HALO_L][tid + HALO_L]);
         }
     }
 
-    // FIX 2: Use an explicit full mask (0xFFFFFFFF) to prevent shuffle stalls
     for (int offset = 16; offset > 0; offset /= 2) {
         thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
     }
 
-    // Step 3: Master thread of each warp writes to shared cache pool
     if (threadIdx.x == 0) {
         smem_min_pool[threadIdx.y] = thread_min;
     }
     __syncthreads();
 
-    // FIX 3: Safe, sequential resolution on thread 0 to eliminate inter-warp shuffle bugs
     if (tid == 0) {
         float final_min = smem_min_pool[0];
         for (int i = 1; i < WARPS_C; ++i) {
@@ -151,46 +126,74 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     __syncthreads();
 
     float norm_factor = max(smem_min_pool[0], MIN_FLT);
+    float inv_norm = 1.0f / norm_factor; // Pre-invert to use multiply instructions instead of costly division
 
-    // Allocate a register array for the current row
-    float local_row[HALO_ALL]; 
+    // 3. Vectorized Stencil Computation & Writeback
+    // Thread block layout (32x4) maps to 32 independent processing units.
+    // Instead of grid-striding by 32 single pixels, we stride by 32 chunks of *4 pixels* (float4).
+    // Loop steps 0 -> (128 total width / 4 elements per vector / 32 threads) = 1 iteration required per row!
+    
+    int target_lx = threadIdx.x * 4; // Thread 0 checks 0,1,2,3; Thread 1 checks 4,5,6,7... up to 127
+    int target_x = block_origin_x + target_lx;
+    int smem_center_x = target_lx + HALO_L;
 
-    // 3. Stencil Computation using Cached Shared Memory Matrix
-    // Use a grid-stride loop over X so 32x4 threads span the 128-column tile width
-    for (int col_step = 0; col_step < 4; ++col_step) {
-        int target_lx = col_step * 32 + threadIdx.x; // Marches across 0 to 127
-        int target_x = block_origin_x + target_lx;
-        int smem_center_x = target_lx + HALO_L;
+    // Loop over the 8 rows assigned to this thread warp level
+    #pragma unroll
+    for (int step = 0; step < 8; ++step) {
+        int target_ly = threadIdx.y * 8 + step;
+        int target_y = block_origin_y + target_ly;
 
-        for (int step = 0; step < 8; ++step) {
-            int target_ly = threadIdx.y * 8 + step;
-            int target_y = block_origin_y + target_ly;
+        // Verify boundary safety for the primary pointer structure
+        if (target_y < height && target_x < width) {
+            
+            // Vector elements to fill accumulator block
+            float4 acc = make_float4(0.0f, 0.0f, 0.0f, 0.0f);
+            int smem_center_y = target_ly + HALO_L;
 
-            if (target_x < width && target_y < height) {
-                float acc = 0.0f;
-                int smem_center_y = target_ly + HALO_L;
+            // Stencil loops using exact bounds to prompt automatic compiler unrolling
+            #pragma unroll 16
+            for (int dy = -7; dy <= 8; ++dy) {
+                int current_smem_y = smem_center_y + dy;
 
-                for (int dy = -HALO_L; dy <= HALO_R; ++dy) {
-                    int current_smem_y = smem_center_y + dy;
+                #pragma unroll 16
+                for (int dx = -7; dx <= 8; ++dx) {
+                    float coeff = c_coeffs[dy + 7][dx + 7];
 
-                    // Copy current row into registers to reuse across dx iterations
-                    #pragma unroll
-                    for (int dx = -7; dx <= 8; ++dx) {
-                        local_row[dx + 7] = smem_input[current_smem_y][smem_center_x + dx];
-                    }
+                    // Process Pixel 0
+                    float v0 = smem_input[current_smem_y][smem_center_x + dx];
+                    acc.x += coeff * (v0 * v0 + 0.25f * v0 + sqrtf(fabsf(v0)));
 
-                    #pragma unroll
-                    for (int dx = -HALO_L; dx <= HALO_R; ++dx) {
-                        int dx_offset = dx + 7;
-                        float v = local_row[dx_offset]; 
-                        
-                        // SFU evaluates fast sqrt calculations
-                        float transformed = v * v + 0.25f * v + sqrtf(fabsf(v)); 
-                        
-                        acc += c_coeffs[dy + 7][dx_offset] * transformed;
-                    }
+                    // Process Pixel 1
+                    float v1 = smem_input[current_smem_y][smem_center_x + dx + 1];
+                    acc.y += coeff * (v1 * v1 + 0.25f * v1 + sqrtf(fabsf(v1)));
+
+                    // Process Pixel 2
+                    float v2 = smem_input[current_smem_y][smem_center_x + dx + 2];
+                    acc.z += coeff * (v2 * v2 + 0.25f * v2 + sqrtf(fabsf(v2)));
+
+                    // Process Pixel 3
+                    float v3 = smem_input[current_smem_y][smem_center_x + dx + 3];
+                    acc.w += coeff * (v3 * v3 + 0.25f * v3 + sqrtf(fabsf(v3)));
                 }
-                output[target_y * width + target_x] = acc / norm_factor;
+            }
+
+            // Normalization mapping
+            acc.x *= inv_norm;
+            acc.y *= inv_norm;
+            acc.z *= inv_norm;
+            acc.w *= inv_norm;
+
+            // Perform vectorized global writeback safely with boundary awareness
+            int out_idx = target_y * width + target_x;
+            
+            if (target_x + 3 < width) {
+                // Perfect alignment match: Cast and execute direct 128-bit store instruction
+                reinterpret_cast<float4*>(output)[out_idx / 4] = acc;
+            } else {
+                // Edge tail correction: Clean individual fallbacks for fractional boundaries
+                output[out_idx] = acc.x;
+                if (target_x + 1 < width) output[out_idx + 1] = acc.y;
+                if (target_x + 2 < width) output[out_idx + 2] = acc.z;
             }
         }
     }
