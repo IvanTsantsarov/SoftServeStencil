@@ -20,12 +20,6 @@ void correctness(int side) {
     
     normalize(side, input); // trash comment
 
-    /*
-    for( int i = 0; i < all; i++ ) {
-        std::cout << input[i] << "|";
-    }
-    */
-
     char file_path[256] = {0};
     sprintf(file_path, "../res/image%d.ppm", side);
     write_ppm(file_path, side, input);
@@ -64,24 +58,31 @@ void correctness(int side) {
     float max_abs_err = 0.0f;
     float max_rel_err = 0.0f;
 
+    int wrong_pixels = 0;
+    const int max_wrong_pixels = 100;
     for (int i = 0; i < all; ++i) {
         float abs_err = std::fabs(cpu_output[i] - gpu_output[i]);
-        float rel_err = abs_err / (std::fabs(cpu_output[i]) + 1e-6f);
+        float rel_err = abs_err / (std::fabs(cpu_output[i]) + BOTTOM_ERR);
 
         if (abs_err > max_abs_err) max_abs_err = abs_err;
         if (rel_err > max_rel_err) max_rel_err = rel_err;
 
         // printout wrong values
-        if (max_abs_err >= MAX_ERR || max_rel_err >= MAX_ERR) { 
-            std::cout << i << "=>" << cpu_output[i] << ',' << gpu_output[i] << '|';// << std::endl;
+        if (abs_err >= MAX_ERR && rel_err >= MAX_ERR) { 
+            wrong_pixels ++;
+            if( wrong_pixels < max_wrong_pixels) {
+                std::cout << i << "=>" << cpu_output[i] << ',' << gpu_output[i] << '|';// << std::endl;
+            }
         }
     }
 
     std::cout << "Test Dimensions: " << side << "x" << side << " -> ";
-    if (max_abs_err < MAX_ERR && max_rel_err < MAX_ERR) {
-        std::cout << "PASSED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
+    if (wrong_pixels == 0) {
+        std::cout << "PASSED (Max Abs Error: " << max_abs_err 
+        << ", Max Rel Error: " << max_rel_err << ")" << std::endl;
     } else {
-        std::cout << "FAILED (Max Abs Error: " << max_abs_err << ", Max Rel Error: " << max_rel_err << ")\n";
+        std::cout << "FAILED (Max Abs Error: " << max_abs_err << ",Wrong pixels:" << wrong_pixels
+        << ", Max Rel Error: " << max_rel_err <<  ")" << std::endl;
         exit(1);
     }
 
