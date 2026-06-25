@@ -45,3 +45,11 @@ Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    E
 1024      0.444832 ms        0.096416 ms        4.613674x     87.0043         13920.7         
 4096      12.664832 ms       1.274784 ms        9.934885x     105.287         16845.9         
 8192      44.995583 ms       4.965376 ms        9.061869x     108.123         17299.7         
+
+-------- after memcpy all four components
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.445440 ms        0.102496 ms        4.345926x     81.8433         13094.9         
+4096      12.463520 ms       1.276928 ms        9.760550x     105.11          16817.6         
+8192      45.957214 ms       4.728224 ms        9.719763x     113.546         18167.4        

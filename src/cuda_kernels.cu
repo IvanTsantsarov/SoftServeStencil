@@ -75,7 +75,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 {
 
     __shared__ cuda::barrier<cuda::thread_scope_block> bar;
-    __shared__ float smem_input[SHARED_H][SHARED_W];
+    __shared__ alignas(16) float smem_input[SHARED_H][SHARED_W];
     __shared__ float smem_min_pool[WARPS_C];
 
     int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
@@ -162,32 +162,27 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
             #pragma unroll 16
             for (int dy = -7; dy <= 8; ++dy) {
                 float* smem_input_y = smem_input[smem_center_y + dy];
+                float4 v;
 
                 #pragma unroll 16
                 for (int dx = -7; dx <= 8; ++dx) {
                     float coeff = c_coeffs[dy + 7][dx + 7];
-
                     // Manual unroll
 
-                    // Pixel 0
-                    float v0 = smem_input_y[smem_center_x + dx];
-                    // acc.x += coeff * (v0 * v0 + 0.25f * v0 + sqrtf(fabsf(v0)));
-                    acc.x += coeff * ((v0 + 0.25f) * v0 + sqrtf(fabsf(v0))); // one multiplication removed
-
-                    // Pixel 1
-                    float v1 = smem_input_y[smem_center_x + dx + 1];
-                    // acc.y += coeff * (v1 * v1 + 0.25f * v1 + sqrtf(fabsf(v1)));
-                    acc.y += coeff * ((v1 + 0.25f) * v1 + sqrtf(fabsf(v1))); // one multiplication removed
-
-                    // Pixel 2
-                    float v2 = smem_input_y[smem_center_x + dx + 2];
-                    // acc.z += coeff * (v2 * v2 + 0.25f * v2 + sqrtf(fabsf(v2)));
-                    acc.z += coeff * ((v2 + 0.25f) * v2 + sqrtf(fabsf(v2))); // one multiplication removed
-
-                    // Process Pixel 3
-                    float v3 = smem_input_y[smem_center_x + dx + 3];
-                    // acc.w += coeff * (v3 * v3 + 0.25f * v3 + sqrtf(fabsf(v3)));
-                    acc.w += coeff * ((v3 + 0.25f) * v3 + sqrtf(fabsf(v3))); // one multiplication removed
+                    // Sequental share mem reading
+                    /*
+                    v.x = smem_input_y[smem_center_x + dx];
+                    v.y = smem_input_y[smem_center_x + dx + 1];
+                    v.z = smem_input_y[smem_center_x + dx + 2];
+                    v.w = smem_input_y[smem_center_x + dx + 3];
+                    */
+                    // v = *reinterpret_cast<const float4*>(&smem_input_y[smem_center_x + dx]);
+                    memcpy(&v, &smem_input_y[smem_center_x + dx], sizeof(float4));
+                    
+                    acc.x += coeff * ((v.x + 0.25f) * v.x + sqrtf(fabsf(v.x))); 
+                    acc.y += coeff * ((v.y + 0.25f) * v.y + sqrtf(fabsf(v.y))); 
+                    acc.z += coeff * ((v.z + 0.25f) * v.z + sqrtf(fabsf(v.z))); 
+                    acc.w += coeff * ((v.w + 0.25f) * v.w + sqrtf(fabsf(v.w))); 
                 }
             }
 
