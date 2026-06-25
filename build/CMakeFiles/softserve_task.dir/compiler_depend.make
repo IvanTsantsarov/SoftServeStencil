@@ -1032,6 +1032,7 @@ CMakeFiles/softserve_task.dir/src/cuda_kernels.cu.o: /home/ivan/Projects/SoftSer
   /usr/local/cuda/targets/x86_64-linux/include/vector_types.h
 
 CMakeFiles/softserve_task.dir/src/main.cpp.o: /home/ivan/Projects/SoftServeStencil/src/main.cpp \
+  /home/ivan/Projects/SoftServeStencil/include/defines.h \
   /home/ivan/Projects/SoftServeStencil/tests/tests.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \

@@ -1,6 +1,7 @@
 CMakeFiles/softserve_task.dir/src/main.cpp.o: \
  /home/ivan/Projects/SoftServeStencil/src/main.cpp \
  /usr/include/stdc-predef.h \
+ /home/ivan/Projects/SoftServeStencil/include/defines.h \
  /home/ivan/Projects/SoftServeStencil/tests/tests.h \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \

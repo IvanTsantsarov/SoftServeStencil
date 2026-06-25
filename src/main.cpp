@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "tests.h"
 #include <filesystem>
 #include <iostream>
@@ -7,7 +8,9 @@ int main() {
     std::cout << "Starting SoftServe task in"  << std::filesystem::current_path() << std::endl;
     std::cout << "==================================="  << std::endl;
 
-    all_correctness();
+    #if !USING_NCU
+        all_correctness();
+    #endif
     all_benchmarks();
 
     std::cout << "==================================="  << std::endl;

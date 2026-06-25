@@ -53,3 +53,4 @@ Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    E
 1024      0.445440 ms        0.102496 ms        4.345926x     81.8433         13094.9         
 4096      12.463520 ms       1.276928 ms        9.760550x     105.11          16817.6         
 8192      45.957214 ms       4.728224 ms        9.719763x     113.546         18167.4        
+

@@ -29,12 +29,15 @@ void benchmark(int size) {
     float baseline_time = 0.0f;
     float optimized_time = 0.0f;
 
-    // Warm-up
-    launch_baseline_kernel(d_input, d_output, size, size, h_coeffs, baseline_time);
-    launch_optimized_kernel(d_input, d_output, size, size, h_coeffs, optimized_time);
+    
+    #if  !USING_NCU
+        // Warm-up
+        launch_baseline_kernel(d_input, d_output, size, size, h_coeffs, baseline_time);
+        launch_optimized_kernel(d_input, d_output, size, size, h_coeffs, optimized_time);
+        // Real Execution Timing Runs
+        launch_baseline_kernel(d_input, d_output, size, size, h_coeffs, baseline_time);
+    #endif
 
-    // Real Execution Timing Runs
-    launch_baseline_kernel(d_input, d_output, size, size, h_coeffs, baseline_time);
     launch_optimized_kernel(d_input, d_output, size, size, h_coeffs, optimized_time);
 
     // Compute metrics
@@ -68,8 +71,10 @@ bool all_benchmarks() {
               << std::setw(18) << "Est. GFLOPS" << std::endl;
     std::cout << std::string(95, '-') << std::endl;
 
-    benchmark(1024);
-    benchmark(4096);
+    #if !USING_NCU
+        benchmark(1024);
+        benchmark(4096);
+    #endif
     benchmark(8192);
 
     return true;

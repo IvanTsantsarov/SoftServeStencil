@@ -70,7 +70,7 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
 ////////////////////////////////////////////////////////////////////////////////
 // OPTIMIZED KERNEL IMPLEMENTATION (AMPERE+)
 ////////////////////////////////////////////////////////////////////////////////
-__global__ void __launch_bounds__(128, 4)
+__global__ void __launch_bounds__(128, 3)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height)
 {
 
@@ -178,11 +178,16 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
                     */
                     // v = *reinterpret_cast<const float4*>(&smem_input_y[smem_center_x + dx]);
                     memcpy(&v, &smem_input_y[smem_center_x + dx], sizeof(float4));
+
+                    #define ACC_ADD(__dim__) acc.__dim__ += \
+                        coeff * ((v.__dim__ + 0.25f) * v.__dim__ + \
+                        fabsf(v.__dim__) * rsqrtf(fabsf(v.__dim__)));
+                        // sqrtf(fabsf(v.__dim__))); 
                     
-                    acc.x += coeff * ((v.x + 0.25f) * v.x + sqrtf(fabsf(v.x))); 
-                    acc.y += coeff * ((v.y + 0.25f) * v.y + sqrtf(fabsf(v.y))); 
-                    acc.z += coeff * ((v.z + 0.25f) * v.z + sqrtf(fabsf(v.z))); 
-                    acc.w += coeff * ((v.w + 0.25f) * v.w + sqrtf(fabsf(v.w))); 
+                    ACC_ADD(x);
+                    ACC_ADD(y);
+                    ACC_ADD(z);
+                    ACC_ADD(w);
                 }
             }
 

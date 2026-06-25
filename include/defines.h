@@ -19,3 +19,5 @@
 #define RND_CENTERS_C 10
 #define RND_AMP 2.0f
 #define RND_PHASE 0.1f
+
+#define USING_NCU 0
