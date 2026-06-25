@@ -1,0 +1,217 @@
+Implement an optimized CUDA application for a tiled stencil operator.
+
+The task is intended to evaluate:
+
+- CUDA programming skills
+- GPU memory hierarchy understanding
+- Modern NVIDIA GPU optimization techniques
+- Ability to reason about performance bottlenecks
+- Software engineering practices
+- Benchmarking and validation methodology
+
+---
+
+# Problem
+
+Given a floating-point image:
+
+```cpp
+float* input;
+float* output;
+
+width;
+height;
+```
+
+Process the image using 128×32 tiles.
+
+For each tile:
+
+1. Compute the minimum value inside the tile.
+2. Compute a 16×16 stencil-based transformation.
+3. Normalize stencil results by the tile minimum.
+
+Reference operation:
+
+```cpp
+tile_min =
+   minimum value inside 128×32 tile;
+
+output[y][x] =
+   stencil16x16(input, x, y) /
+   max(tile_min, 1e-6f);
+```
+
+---
+
+# Stencil Definition
+
+```cpp
+float acc = 0.0f;
+
+for (int dy = -7; dy <= 8; ++dy)
+{
+   for (int dx = -7; dx <= 8; ++dx)
+   {
+       float v = input[y + dy][x + dx];
+
+       float transformed =
+           v * v +
+           0.25f * v +
+           sqrtf(fabsf(v));
+
+       acc += coeffs[dy + 7][dx + 7] * transformed;
+   }
+}
+```
+
+Result:
+
+```cpp
+output[y][x] =
+   acc / max(tile_min, 1e-6f);
+```
+
+---
+
+# Deliverables
+
+```text
+cuda_tile_stencil_task/
+├── CMakeLists.txt
+├── README.md
+├── include/
+├── src/
+├── tests/
+```
+
+---
+
+# Definition of Done
+
+## Build
+
+Project builds with:
+
+```bash
+cmake -S . -B build
+cmake --build build -j
+```
+
+Must support:
+
+```text
+Ampere and newer architectures.
+```
+
+Implementations may use architecture-specific optimizations when available.
+
+---
+
+## CPU Reference
+
+Provide a CPU implementation of the algorithm.
+
+Requirements:
+
+- deterministic
+- numerically stable
+- suitable for validation
+
+---
+
+## CUDA Implementation
+
+Provide:
+
+### Baseline Version
+
+A straightforward CUDA implementation intended primarily for correctness.
+
+### Optimized Version
+
+A performance-oriented CUDA implementation.
+
+The candidate is free to choose optimization techniques.
+
+---
+
+## Correctness
+
+Provide automated correctness tests.
+
+Required image sizes:
+
+```text
+256×256
+1024×1024
+4096×4096
+```
+
+Validation criteria:
+
+```cpp
+max_abs_error < 1e-3f
+relative_error < 1e-3f
+```
+
+---
+
+## Benchmarking
+
+Provide a benchmark executable.
+
+Required sizes:
+
+```text
+1024×1024
+4096×4096
+8192×8192
+```
+
+Report:
+
+- execution time
+- effective bandwidth
+- estimated arithmetic throughput
+- speedup versus baseline
+
+Measurements must use CUDA events.
+
+---
+
+## Documentation
+
+README must describe:
+
+- build procedure
+- test procedure
+- benchmark procedure
+- optimization strategy
+- architecture assumptions
+- performance observations
+
+---
+
+# Discussion Section
+
+Include a short report (1–3 pages or README section) describing:
+
+- major bottlenecks identified
+- optimization opportunities considered
+- techniques used
+- techniques considered but rejected
+- architecture-specific observations
+
+---
+
+# Evaluation
+
+The candidate will be evaluated on:
+
+- correctness
+- code quality
+- performance
+- testing discipline
+- ability to explain design decisions
+- understanding of modern NVIDIA GPU optimization techniques

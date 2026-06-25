@@ -21,3 +21,19 @@ Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    E
 1024      0.448480 ms        0.109568 ms        4.093166x     76.5607         12249.7
 4096      11.816288 ms       1.321984 ms        8.938298x     101.527         16244.4
 8192      45.305279 ms       4.850688 ms        9.339970x     110.679         17708.7
+
+--------- after 1 time executed - maybe because cache wormup
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.443392 ms        0.101376 ms        4.373738x     82.7475         13239.6         
+4096      11.724192 ms       1.313792 ms        8.923933x     102.161         16345.7         
+8192      47.041695 ms       5.993472 ms        7.848822x     89.5759         14332.2         
+
+--------- (after one multiplication removed)
+
+esolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.443392 ms        0.096256 ms        4.606383x     87.1489         13943.8         
+4096      12.787104 ms       1.275712 ms        10.023503x    105.21          16833.6         
+8192      42.295296 ms       4.685568 ms        9.026717x     114.58          18332.8         

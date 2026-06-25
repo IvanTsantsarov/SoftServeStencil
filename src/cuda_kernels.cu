@@ -171,19 +171,23 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 
                     // Pixel 0
                     float v0 = smem_input[current_smem_y][smem_center_x + dx];
-                    acc.x += coeff * (v0 * v0 + 0.25f * v0 + sqrtf(fabsf(v0)));
+                    // acc.x += coeff * (v0 * v0 + 0.25f * v0 + sqrtf(fabsf(v0)));
+                    acc.x += coeff * ((v0 + 0.25f) * v0 + sqrtf(fabsf(v0))); // one multiplication removed
 
                     // Pixel 1
                     float v1 = smem_input[current_smem_y][smem_center_x + dx + 1];
-                    acc.y += coeff * (v1 * v1 + 0.25f * v1 + sqrtf(fabsf(v1)));
+                    // acc.y += coeff * (v1 * v1 + 0.25f * v1 + sqrtf(fabsf(v1)));
+                    acc.y += coeff * ((v1 + 0.25f) * v1 + sqrtf(fabsf(v1))); // one multiplication removed
 
                     // Pixel 2
                     float v2 = smem_input[current_smem_y][smem_center_x + dx + 2];
-                    acc.z += coeff * (v2 * v2 + 0.25f * v2 + sqrtf(fabsf(v2)));
+                    // acc.z += coeff * (v2 * v2 + 0.25f * v2 + sqrtf(fabsf(v2)));
+                    acc.z += coeff * ((v2 + 0.25f) * v2 + sqrtf(fabsf(v2))); // one multiplication removed
 
                     // Process Pixel 3
                     float v3 = smem_input[current_smem_y][smem_center_x + dx + 3];
-                    acc.w += coeff * (v3 * v3 + 0.25f * v3 + sqrtf(fabsf(v3)));
+                    // acc.w += coeff * (v3 * v3 + 0.25f * v3 + sqrtf(fabsf(v3)));
+                    acc.w += coeff * ((v3 + 0.25f) * v3 + sqrtf(fabsf(v3))); // one multiplication removed
                 }
             }
 
