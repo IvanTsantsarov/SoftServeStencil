@@ -1,3 +1,0 @@
-/home/ivan/Projects/SoftServeStencil/build/CMakeFiles/softserve_task.dir
-/home/ivan/Projects/SoftServeStencil/build/CMakeFiles/edit_cache.dir
-/home/ivan/Projects/SoftServeStencil/build/CMakeFiles/rebuild_cache.dir
