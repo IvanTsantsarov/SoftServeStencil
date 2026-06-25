@@ -203,6 +203,11 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
                         memcpy(&v, &smem_input_y[smem_center_x + dx], sizeof(float2));
                     #endif
 
+                    // TODO: SQRT is a serios bottleneck
+                    // try to use Taylor series 
+                    // with first 3 members of the row: sqrt(x) = 1 + 1/2(x-1) - 1/8(x-1)^2;
+                    // for values close to 1 it gives 1e-4 error (bellow MAX_ERR)
+
                     #define ACC_ADD(__dim__) acc.__dim__ += \
                         coeff * ((v.__dim__ + 0.25f) * v.__dim__ + \
                         sqrtf(fabsf(v.__dim__))); 
