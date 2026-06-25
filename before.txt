@@ -54,3 +54,10 @@ Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    E
 4096      12.463520 ms       1.276928 ms        9.760550x     105.11          16817.6         
 8192      45.957214 ms       4.728224 ms        9.719763x     113.546         18167.4        
 
+-------- after using half (float16)
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.449536 ms        0.107520 ms        4.180953x     78.019          12483           
+4096      11.390112 ms       1.307648 ms        8.710382x     102.641         16422.5         
+8192      42.599167 ms       4.858880 ms        8.767281x     110.493         17678.8      

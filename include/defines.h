@@ -1,7 +1,7 @@
 // When profiling with NCU is used onlu optimized kernel runs 
 // only on highest resolution
 // with no correctness tests 
-#define USING_NCU 1
+#define USING_NCU 0
 
 // Beauty result using inv_norm_factor = 0.5f, not max(tile_min, MIN_FLT)
 #define BEAUTY_RESULT 1
