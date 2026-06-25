@@ -38,7 +38,13 @@ void cpu_stencil_transform(
                     tile_min = std::min(tile_min, input[y * width + x]);
                 }
             }
-            float inv_norm_factor = 0.5f; // 1.0f / std::max(tile_min, 1e-6f);
+
+                // but I've changed it like just to create smooth result
+            #if BEAUTY_RESULT
+                float inv_norm_factor = 0.5f;
+            #else
+                float inv_norm_factor = 1.0f / std::max(tile_min, MIN_FLT);
+            #endif
 
             // 2. Compute stencil transformation & normalization
             for (int y = ty; y < std::min(endTileY, height); ++y) {

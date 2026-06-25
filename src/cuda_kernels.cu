@@ -42,7 +42,14 @@ __global__ void baseline_kernel(const float* input, float* output, int width, in
             if (v < tile_min) tile_min = v;
         }
     }
-    float inv_norm_factor = 0.5f; // 1.0f / max(tile_min, MIN_FLT);
+
+    // but I've changed it like just to create smooth result
+    #if BEAUTY_RESULT
+        float inv_norm_factor = 0.5f;
+    #else
+        float inv_norm_factor = 1.0f / max(tile_min, MIN_FLT);
+    #endif
+
 
     // Phase 2: Grid-stride loop to make 32x4 threads process all 128x32 pixels
     for (int local_y = threadIdx.y; local_y < TILE_H; local_y += blockDim.y) {
@@ -74,16 +81,24 @@ __global__ void __launch_bounds__(128, 3)
 optimized_kernel(const float* __restrict__ input, float* __restrict__ output, int width, int height)
 {
 
-    __shared__ cuda::barrier<cuda::thread_scope_block> bar;
-    __shared__ alignas(16) float smem_input[SHARED_H][SHARED_W];
+    #if HALF_FLOAT
+        __shared__ half smem_input[SHARED_H][SHARED_W];
+    #else
+        __shared__ float smem_input[SHARED_H][SHARED_W];
+    #endif
+    
     __shared__ float smem_min_pool[WARPS_C];
 
     int tid = threadIdx.y * blockDim.x + threadIdx.x; // 0 to 127
     
-    if (tid == 0) {
-        init(&bar, blockDim.x * blockDim.y); 
-    }
-    __syncthreads();     
+    #if !HALF_FLOAT
+        __shared__ cuda::barrier<cuda::thread_scope_block> bar;
+        if (tid == 0) {
+            init(&bar, blockDim.x * blockDim.y); 
+        }
+        __syncthreads();     
+    #endif
+    
     
     int block_origin_x = blockIdx.x * TILE_W;
     int block_origin_y = blockIdx.y * TILE_H;
@@ -96,9 +111,16 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
         int glob_x = max(0, min(width - 1, block_origin_x - HALO_L + smem_x));
         int glob_y = max(0, min(height - 1, block_origin_y - HALO_L + smem_y));
 
-        cuda::memcpy_async(&smem_input[smem_y][smem_x], &input[glob_y * width + glob_x], sizeof(float), bar);
+        #if HALF_FLOAT
+            smem_input[smem_y][smem_x] = input[glob_y * width + glob_x];
+        #else
+            cuda::memcpy_async(&smem_input[smem_y][smem_x], &input[glob_y * width + glob_x], sizeof(float), bar);
+        #endif
     }
-    bar.arrive_and_wait();
+    
+    #if !HALF_FLOAT
+        bar.arrive_and_wait();
+    #endif
 
     // 2. Tile minimum calc
     float thread_min = MAX_FLT;
@@ -129,11 +151,12 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     __syncthreads(); 
 
     
-    // In the task this is defined as:
-    // float inv_norm_factor = 1.0f / max(smem_min_pool[0], MIN_FLT);
-
     // but I've changed it like just to create smooth result
-    float inv_norm_factor = 0.5f; // 1.0f / max(smem_min_pool[0], MIN_FLT);
+    #if BEAUTY_RESULT
+        float inv_norm_factor = 0.5f;
+    #else
+        float inv_norm_factor = 1.0f / max(smem_min_pool[0], MIN_FLT);
+    #endif
 
     // 3. Using vector computation instead
     // Thread block layout (32x4) maps to 32 independent processing units.
@@ -161,7 +184,7 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
             // *** Warning, this connected to HALO size!
             #pragma unroll 16
             for (int dy = -7; dy <= 8; ++dy) {
-                float* smem_input_y = smem_input[smem_center_y + dy];
+                half* smem_input_y = smem_input[smem_center_y + dy];
                 float4 v;
 
                 #pragma unroll 16
@@ -170,19 +193,20 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
                     // Manual unroll
 
                     // Sequental share mem reading
-                    /*
-                    v.x = smem_input_y[smem_center_x + dx];
-                    v.y = smem_input_y[smem_center_x + dx + 1];
-                    v.z = smem_input_y[smem_center_x + dx + 2];
-                    v.w = smem_input_y[smem_center_x + dx + 3];
-                    */
-                    // v = *reinterpret_cast<const float4*>(&smem_input_y[smem_center_x + dx]);
-                    memcpy(&v, &smem_input_y[smem_center_x + dx], sizeof(float4));
+    
+                    #if HALF_FLOAT
+                        v.x = smem_input_y[smem_center_x + dx];
+                        v.y = smem_input_y[smem_center_x + dx + 1];
+                        v.z = smem_input_y[smem_center_x + dx + 2];
+                        v.w = smem_input_y[smem_center_x + dx + 3];
+                    #else                    
+                        memcpy(&v, &smem_input_y[smem_center_x + dx], sizeof(float2));
+                    #endif
 
                     #define ACC_ADD(__dim__) acc.__dim__ += \
                         coeff * ((v.__dim__ + 0.25f) * v.__dim__ + \
-                        fabsf(v.__dim__) * rsqrtf(fabsf(v.__dim__)));
-                        // sqrtf(fabsf(v.__dim__))); 
+                        sqrtf(fabsf(v.__dim__))); 
+                        // fabsf(v.__dim__) * rsqrtf(fabsf(v.__dim__)));
                     
                     ACC_ADD(x);
                     ACC_ADD(y);
@@ -222,9 +246,9 @@ void launch_baseline_kernel(const float* d_input, float* d_output, int width, in
 
     CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
-    dim3 threadsPerBlock(32, 4); // Fixed layout targeting 128 elements inside loop structures
-    dim3 numBlocks((width + 127) / 128, (height + 31) / 32);
-
+    dim3 numBlocks((width + TILE_W - 1) / TILE_W, (height + TILE_H - 1) / TILE_H ); 
+    dim3 threadsPerBlock(32, 4); // 128 total threads
+    
     cudaEvent_t start, stop;
     CUDA_CHECK(cudaEventCreate(&start));
     CUDA_CHECK(cudaEventCreate(&stop));
@@ -247,8 +271,8 @@ void launch_baseline_kernel(const float* d_input, float* d_output, int width, in
 void launch_optimized_kernel(const float* d_input, float* d_output, int width, int height, const float h_coeffs[16][16], float& elapsed_ms) {
     CUDA_CHECK(cudaMemcpyToSymbol(c_coeffs, h_coeffs, COEF_ALL * sizeof(float)));
 
-    dim3 threadsPerBlock(32, 4); // 128 total threads matching optimized architecture bounds
-    dim3 numBlocks((width + 127) / 128, (height + 31) / 32);
+    dim3 numBlocks((width + TILE_W - 1) / TILE_W, (height + TILE_H - 1) / TILE_H );
+    dim3 threadsPerBlock(32, 4); // 128 total threads
 
     cudaEvent_t start, stop;
     CUDA_CHECK(cudaEventCreate(&start));
