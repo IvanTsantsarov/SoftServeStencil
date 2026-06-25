@@ -37,3 +37,11 @@ esolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Es
 1024      0.443392 ms        0.096256 ms        4.606383x     87.1489         13943.8         
 4096      12.787104 ms       1.275712 ms        10.023503x    105.21          16833.6         
 8192      42.295296 ms       4.685568 ms        9.026717x     114.58          18332.8         
+
+--------- (after one addressing operation removed)
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.444832 ms        0.096416 ms        4.613674x     87.0043         13920.7         
+4096      12.664832 ms       1.274784 ms        9.934885x     105.287         16845.9         
+8192      44.995583 ms       4.965376 ms        9.061869x     108.123         17299.7         
