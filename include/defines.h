@@ -8,7 +8,7 @@
 
 // Half float tendst to use float16 instead of float32
 // for inputs shared memory
-#define HALF_FLOAT 1
+#define HALF_FLOAT 0
 
 
 #define THREADS_C 128

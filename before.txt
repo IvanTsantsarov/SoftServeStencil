@@ -61,3 +61,59 @@ Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    E
 1024      0.449536 ms        0.107520 ms        4.180953x     78.019          12483           
 4096      11.390112 ms       1.307648 ms        8.710382x     102.641         16422.5         
 8192      42.599167 ms       4.858880 ms        8.767281x     110.493         17678.8      
+
+-------- after using sqrt
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.449536 ms        0.110592 ms        4.064815x     75.8519         12136.3         
+4096      13.583840 ms       1.317536 ms        10.310034x    101.87          16299.2         
+8192      48.836353 ms       5.172160 ms        9.442158x     103.8           16608          
+
+-------- after using abs(x) * rsqrt(abs(x)) 
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.449536 ms        0.115712 ms        3.884956x     72.4956         11599.3         
+4096      11.712576 ms       1.465152 ms        7.994103x     91.6067         14657.1         
+8192      43.006977 ms       5.463040 ms        7.872353x     98.2733         15723.7    
+
+-------- whithout sqrt
+
+
+
+-------- whith Taylor 5
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+8192      0.000000 ms        10.294272 ms       0.000000x     52.1524         8344.38         
+
+-------- whith Taylor 5 multyline
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+8192      0.000000 ms        8.611840 ms        0.000000x     62.341          9974.56         
+
+-------- back to simple SFPU sqrt
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.449536 ms        0.108544 ms        4.141510x     77.283          12365.3         
+4096      11.822272 ms       1.306624 ms        9.047953x     102.721         16435.4         
+8192      44.440575 ms       5.158912 ms        8.614330x     104.067         16650.7         
+
+-------- Just run it again (half float) - it looks like warmed up GPU and no additional tasks
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.449536 ms        0.106496 ms        4.221154x     78.7692         12603.1         
+4096      13.155328 ms       1.306080 ms        10.072375x    102.764         16442.2         
+8192      46.120193 ms       4.879360 ms        9.452099x     110.029         17604.6  
+
+-------- 32 bits float (disabled HALF_FLOAT)
+
+Resolution  Baseline Time     Optimized Time    Speedup      Eff. BW (GB/s)    Est. GFLOPS       
+-----------------------------------------------------------------------------------------------
+1024      0.443392 ms        0.091136 ms        4.865169x     92.0449         14727.2         
+4096      11.379712 ms       1.091584 ms        10.424953x    122.957         19673.1         
+8192      42.591232 ms       3.985728 ms        10.685935x    134.698         21551.7         

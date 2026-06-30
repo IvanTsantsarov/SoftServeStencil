@@ -22,6 +22,11 @@ __device__ inline float fetch_pixel(const float* input, int x, int y, int width,
     return input[y * width + x];
 }
 
+__device__ inline float taylor_approx(float x) { 
+    return sqrt(x);
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // NON OPTIMIZED (BASELINE) KERNEL IMPLEMENTATION
 ////////////////////////////////////////////////////////////////////////////////
@@ -133,6 +138,8 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
     // Reduction
     for (int offset = 16; offset > 0; offset /= 2) {
         thread_min = min(thread_min, __shfl_down_sync(0xFFFFFFFF, thread_min, offset));
+        // after current lane > 15  it became
+        // thread_min = min(thread_min, thread_min);
     }
 
     if (threadIdx.x == 0) {
@@ -184,7 +191,13 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
             // *** Warning, this connected to HALO size!
             #pragma unroll 16
             for (int dy = -7; dy <= 8; ++dy) {
-                half* smem_input_y = smem_input[smem_center_y + dy];
+
+                #if HALF_FLOAT
+                    half* smem_input_y = smem_input[smem_center_y + dy];
+                #else
+                    float* smem_input_y = smem_input[smem_center_y + dy];
+                #endif 
+
                 float4 v;
 
                 #pragma unroll 16
@@ -205,13 +218,18 @@ optimized_kernel(const float* __restrict__ input, float* __restrict__ output, in
 
                     // TODO: SQRT is a serios bottleneck
                     // try to use Taylor series 
-                    // with first 3 members of the row: sqrt(x) = 1 + 1/2(x-1) - 1/8(x-1)^2;
-                    // for values close to 1 it gives 1e-4 error (bellow MAX_ERR)
+                    // with first 3 members of the row:
+                    // md $$ \(\sqrt{x} = \sqrt{a} + \frac{1}{2\sqrt{a}}(x-a) - \frac{1}{8a\sqrt{a}}(x-a)^2 + \frac{1}{16a^2\sqrt{a}}(x-a)^3 - \dots\) $$
+                    // But it's slower than sqrtf, so I just use it for now
+
 
                     #define ACC_ADD(__dim__) acc.__dim__ += \
                         coeff * ((v.__dim__ + 0.25f) * v.__dim__ + \
                         sqrtf(fabsf(v.__dim__))); 
+                        // taylor_approx(fabsf(v.__dim__)));
+                        // sqrtf(fabsf(v.__dim__))); 
                         // fabsf(v.__dim__) * rsqrtf(fabsf(v.__dim__)));
+                        
                     
                     ACC_ADD(x);
                     ACC_ADD(y);

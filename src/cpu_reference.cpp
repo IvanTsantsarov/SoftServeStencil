@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iostream>
 
-
 void cpu_stencil_transform(
     const float* input,
     float* output,
