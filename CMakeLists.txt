@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.18)
-project(softserve_cuda_task LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc" CACHE FILEPATH "CUDA compiler")
+
+project(softserve_cuda_task LANGUAGES CXX CUDA)
 
 # Target Ampere, Ada Lovelace, and Hopper
 set(CMAKE_CUDA_ARCHITECTURES "80;89;90")

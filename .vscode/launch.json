@@ -1,4 +1,3 @@
- 
 {
     "version": "0.2.0",
     "configurations": [
@@ -12,7 +11,8 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "debuggerPath": "/usr/local/cuda/bin/cuda-gdb"
+            "debuggerPath": "/usr/local/cuda/bin/cuda-gdb",
+            "preLaunchTask": "CMake: Build Project" 
         }
     ]
 }
